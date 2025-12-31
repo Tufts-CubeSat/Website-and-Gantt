@@ -79,15 +79,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+        env:
+          # Make GitHub secret available as an environment variable during build
+          NEXT_PUBLIC_GSTC_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_GSTC_LICENSE_KEY }} 
+          # Make GitHub variable available as an environment variable during build
+          # APP_BASE_URL: ${{ vars.APP_BASE_URL }}
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
