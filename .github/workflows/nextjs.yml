@@ -61,6 +61,11 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
+        env:
+          # Make GitHub secret available as an environment variable during build
+          NEXT_PUBLIC_GSTC_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_GSTC_LICENSE_KEY }} 
+          # Make GitHub variable available as an environment variable during build
+          # APP_BASE_URL: ${{ vars.APP_BASE_URL }}
       - name: Restore cache
         uses: actions/cache@v4
         with:
@@ -79,11 +84,5 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
-      - name: Build site with environment variables
-        run: npm run build
-        env:
-          # Make GitHub secret available as an environment variable during build
-          NEXT_PUBLIC_GSTC_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_GSTC_LICENSE_KEY }} 
-          # Make GitHub variable available as an environment variable during build
-          # APP_BASE_URL: ${{ vars.APP_BASE_URL }}
+
 
