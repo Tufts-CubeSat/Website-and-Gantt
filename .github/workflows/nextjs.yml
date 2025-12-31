@@ -79,6 +79,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+      - name: Build site with environment variables
+        run: npm run build
         env:
           # Make GitHub secret available as an environment variable during build
           NEXT_PUBLIC_GSTC_LICENSE_KEY: ${{ secrets.NEXT_PUBLIC_GSTC_LICENSE_KEY }} 
