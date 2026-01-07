@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { Search } from "./search";
 
 // Navigation items with support for dropdowns
@@ -89,7 +90,7 @@ export function Navigation() {
     <>
       {/* Top Header Bar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-black z-50 flex items-center justify-between px-4 md:px-8 shadow-lg">
-        {/* Mobile: Hamburger on left, Title on right */}
+        {/* Mobile: Hamburger on left, Logo + Title on right */}
         <div className="md:hidden flex items-center justify-between w-full">
           <button
             className="p-2 text-white transition-transform duration-200 hover:scale-110 active:scale-95"
@@ -113,12 +114,30 @@ export function Navigation() {
               />
             </div>
           </button>
-          <h1 className="text-white font-semibold text-lg">Tufts CubeSat</h1>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Image
+              src="/Tufts_Jumbos_logo.svg"
+              alt="Tufts University Logo"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+            />
+            <h1 className="text-white font-semibold text-lg">Tufts CubeSat</h1>
+          </Link>
         </div>
 
-        {/* Desktop: Title on left, Search on right */}
+        {/* Desktop: Logo + Title on left, Search on right */}
         <div className="hidden md:flex items-center justify-between w-full">
-          <h1 className="text-white font-semibold text-xl">Tufts CubeSat</h1>
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <Image
+              src="/Tufts_Jumbos_logo.svg"
+              alt="Tufts University Logo"
+              width={40}
+              height={40}
+              className="h-10 w-auto"
+            />
+            <h1 className="text-white font-semibold text-xl">Tufts CubeSat</h1>
+          </Link>
           <Search />
         </div>
       </header>
