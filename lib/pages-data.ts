@@ -25,7 +25,7 @@ export const pagesData: Record<string, PageMetadata> = {
     id: "team",
     title: "Team",
     href: "/team",
-    description: "Meet our team members, students, faculty advisors, and collaborators working on the CubeSat project. Learn about the people behind SPACE RACOON and their roles in the mission.",
+    description: "Meet our team members and collaborators working on the CubeSat project. ",
     keywords: ["team", "members", "students", "faculty", "advisors", "collaborators", "people", "staff"],
     category: "About",
     priority: 8,
