@@ -23,7 +23,7 @@ export const pagesData: Record<string, PageMetadata> = {
   }),
   team: createPageMetadata({
     id: "team",
-    title: "Team",
+    title: "Meet Our Team",
     href: "/team",
     description: "Meet our team members and collaborators working on the CubeSat project. ",
     keywords: ["team", "members", "students", "faculty", "advisors", "collaborators", "people", "staff"],
@@ -52,7 +52,7 @@ export const pagesData: Record<string, PageMetadata> = {
     id: "resources",
     title: "Resources",
     href: "/resources",
-    description: "Documentation, guides, research papers, technical documentation, helpful links, and educational resources for the CubeSat project. Access project documentation and learning materials.",
+    description: "Documentation, guides, research papers, technical documentation, helpful links, and educational resources for the CubeSat project.",
     keywords: ["resources", "documentation", "guides", "papers", "research", "technical", "links", "education", "materials", "docs"],
     category: "Resources",
     priority: 7,
