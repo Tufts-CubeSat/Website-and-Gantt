@@ -71,35 +71,59 @@ export default function Timeline() {
 
         const GSTCID = GSTC.api.GSTCID;
 
-        // Row data
-        const rows = {
-          [GSTCID("1")]: {
-            id: GSTCID("1"),
-            label: "SPACE RACOON Project",
-          },
+        // Helper function to create sub-item rows and items
+        const createSubItems = (parentId: string, parentLabel: string, parentStart: number, parentEnd: number, index: number) => {
+          const subRows: any = {};
+          const subItems: any = {};
+          const duration = parentEnd - parentStart;
+          const segmentDuration = duration / 3;
+
+          for (let i = 1; i <= 3; i++) {
+            const subId = `${parentId}_sub${i}`;
+            const subRowId = GSTCID(subId);
+            const subStart = parentStart + (i - 1) * segmentDuration;
+            const subEnd = parentStart + i * segmentDuration;
+
+            subRows[subRowId] = {
+              id: subRowId,
+              parentId: GSTCID(parentId),
+              label: `${parentLabel} - Sub-task ${i}`,
+            };
+
+            subItems[subRowId] = {
+              id: subRowId,
+              rowId: subRowId,
+              label: `${parentLabel} - Sub-task ${i}`,
+              time: {
+                start: subStart,
+                end: subEnd,
+              },
+            };
+          }
+
+          return { subRows, subItems };
+        };
+
+        // Row data - Main tasks (no parent row)
+        const rows: any = {
           [GSTCID("2")]: {
             id: GSTCID("2"),
-            parentId: GSTCID("1"),
             label: "Design Phase",
           },
           [GSTCID("3")]: {
             id: GSTCID("3"),
-            parentId: GSTCID("1"),
             label: "Hardware Development",
           },
           [GSTCID("4")]: {
             id: GSTCID("4"),
-            parentId: GSTCID("1"),
             label: "Software Development",
           },
           [GSTCID("5")]: {
             id: GSTCID("5"),
-            parentId: GSTCID("1"),
             label: "Testing & Integration",
           },
           [GSTCID("6")]: {
             id: GSTCID("6"),
-            parentId: GSTCID("1"),
             label: "Launch Preparation",
           },
         };
@@ -117,17 +141,8 @@ export default function Timeline() {
           },
         };
 
-        // Items (gantt bars) - Updated dates: December 2025 to December 2028
-        const items = {
-          [GSTCID("1")]: {
-            id: GSTCID("1"),
-            rowId: GSTCID("1"),
-            label: "SPACE RACOON Project",
-            time: {
-              start: GSTC.api.date("2025-12-01").valueOf(),
-              end: GSTC.api.date("2028-12-31").valueOf(),
-            },
-          },
+        // Items (gantt bars) - Main tasks
+        const items: any = {
           [GSTCID("2")]: {
             id: GSTCID("2"),
             rowId: GSTCID("2"),
@@ -175,6 +190,29 @@ export default function Timeline() {
           },
         };
 
+        // Add sub-items for each main task (rows 2-6)
+        const mainTaskIds = ["2", "3", "4", "5", "6"];
+        const mainTaskData = [
+          { start: GSTC.api.date("2025-12-01").valueOf(), end: GSTC.api.date("2026-05-31").valueOf() },
+          { start: GSTC.api.date("2026-03-01").valueOf(), end: GSTC.api.date("2026-10-31").valueOf() },
+          { start: GSTC.api.date("2026-06-01").valueOf(), end: GSTC.api.date("2027-02-28").valueOf() },
+          { start: GSTC.api.date("2027-01-01").valueOf(), end: GSTC.api.date("2027-08-31").valueOf() },
+          { start: GSTC.api.date("2027-09-01").valueOf(), end: GSTC.api.date("2028-12-31").valueOf() },
+        ];
+
+        mainTaskIds.forEach((taskId, idx) => {
+          const parentRow = rows[GSTCID(taskId)];
+          const { subRows, subItems } = createSubItems(
+            taskId,
+            parentRow.label,
+            mainTaskData[idx].start,
+            mainTaskData[idx].end,
+            idx
+          );
+          Object.assign(rows, subRows);
+          Object.assign(items, subItems);
+        });
+
         // Get license key from environment variable
         const licenseKey = process.env.NEXT_PUBLIC_GSTC_LICENSE_KEY;
         
@@ -182,6 +220,14 @@ export default function Timeline() {
           setError("GSTC license key not found. Please set NEXT_PUBLIC_GSTC_LICENSE_KEY in your .env.local file.");
           return;
         }
+
+        // Get today's date for autoscroll
+        const today = GSTC.api.date().startOf("day").valueOf();
+        const projectStart = GSTC.api.date("2025-12-01").valueOf();
+        const projectEnd = GSTC.api.date("2028-12-31").valueOf();
+        const todayInRange = today >= projectStart && today <= projectEnd;
+        // Use today if in range, otherwise use project start
+        const scrollToDate = todayInRange ? today : projectStart;
 
         // Configuration
         const config = {
@@ -194,20 +240,42 @@ export default function Timeline() {
           },
           chart: {
             time: {
-              from: GSTC.api.date("2025-12-01").startOf("day").valueOf(),
-              to: GSTC.api.date("2028-12-31").endOf("day").valueOf(),
+              from: projectStart,
+              to: projectEnd,
             },
             items: items,
+            currentDate: todayInRange ? today : projectStart,
+            scales: [
+              { unit: "year", step: 1, format: "yyyy" },
+              { unit: "month", step: 1, format: "MMMM" },
+              { unit: "week", step: 1, format: "w" },
+            ],
+          },
+          scroll: {
+            left: scrollToDate,
           },
         };
 
         console.log("Initializing GSTC...");
 
         // Initialize GSTC
+        const state = GSTC.api.stateFromConfig(config);
         gstcInstance.current = GSTC({
           element: gstcRef.current,
-          state: GSTC.api.stateFromConfig(config),
+          state: state,
         });
+
+        // Scroll to today using state API
+        if (gstcInstance.current && gstcInstance.current.state) {
+          setTimeout(() => {
+            try {
+              // Update scroll position via state
+              gstcInstance.current.state.update("config.scroll.left", scrollToDate);
+            } catch (err) {
+              console.warn("Could not scroll to today:", err);
+            }
+          }, 200);
+        }
 
         console.log("GSTC initialized successfully");
       } catch (err) {
