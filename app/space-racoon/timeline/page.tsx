@@ -249,15 +249,6 @@ export default function Timeline() {
           style={{ height: "600px" }}
         />
       )}
-
-      <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded">
-        <p className="text-sm text-blue-800">
-          <strong>Timeline Range:</strong> December 2025 - December 2028
-        </p>
-        <p className="text-sm text-blue-800 mt-2">
-          <strong>License Key:</strong> Stored in <code>.env.local</code> as <code>NEXT_PUBLIC_GSTC_LICENSE_KEY</code>
-        </p>
-      </div>
     </main>
   );
 }
