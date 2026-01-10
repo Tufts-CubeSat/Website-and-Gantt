@@ -1,4 +1,4 @@
-dimport { pagesData } from "@/lib/pages-data";
+import { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 
