@@ -1,4 +1,4 @@
-import { pagesData } from "@/lib/pages-data";
+dimport { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 
@@ -25,7 +25,7 @@ const teamData = {
     { name: "Natalie", lastName: "Germanov", role: "Structures Lead", subteam: "Structures" },
     { name: "Jacky", lastName: "Zhao", role: "Power Lead", subteam: "Powers" },
     { name: "Ryan", lastName: "Cooley", role: "Comms Lead", subteam: "Comms" },
-    { name: "Kyle", lastName: "", role: "Software Lead", subteam: "Software" },
+    { name: "Kyle", lastName: "Wigdor", role: "Software Lead", subteam: "Software" },
   ],
   subteams: {
     Structures: ["Allie Staiger"] as string[],
