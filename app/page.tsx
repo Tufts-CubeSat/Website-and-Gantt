@@ -64,6 +64,20 @@ export default function Home() {
       </div>
       
       {/* Page Content */}
+      <div className="mb-6 overflow-hidden rounded-lg bg-blue-600 px-4 py-3 shadow-lg transition-all hover:bg-blue-700">
+        <div className="flex items-center justify-between flex-wrap">
+          <div className="flex flex-1 items-center">
+            <span className="flex rounded-lg bg-blue-800 p-2 text-xs font-bold uppercase tracking-wider text-white">
+              Upcoming
+            </span>
+            <p className="ml-3 truncate font-medium text-white">
+              <span className="md:hidden">Spring GIM: 1/26, 8pm @ TTC 211</span>
+              <span className="hidden md:inline">Spring GIM: Monday, 1/26 @ 8:00pm, TTC 211</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      
       <div className="prose max-w-none mb-8">
         <p className="mb-4">
           The Tufts CubeSat team is currently working on the "SPACE RACCOON" mission, a 14-month initiative focused on improving orbital safety through the development of a 2U satellite. This project is <strong>Tufts's first ever CubeSat mission</strong>. Our project's primary objective is to detect, classify, and assess the risk of space debris in Low Earth Orbit (LEO) using onboard computer vision and machine learning.
