@@ -116,8 +116,8 @@ export function Navigation() {
           </button>
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Image
-              src="/Tufts_Jumbos_logo.svg"
-              alt="Tufts University Logo"
+              src="/CubeSat-Logo1.png"
+              alt="Tufts CubeSat Logo"
               width={32}
               height={32}
               className="h-8 w-auto"
@@ -130,8 +130,8 @@ export function Navigation() {
         <div className="hidden md:flex items-center justify-between w-full">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <Image
-              src="/Tufts_Jumbos_logo.svg"
-              alt="Tufts University Logo"
+              src="/CubeSat-Logo1.png"
+              alt="Tufts CubeSat Logo"
               width={40}
               height={40}
               className="h-10 w-auto"

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getLastUpdated } from "@/lib/utils";
 import Link from "next/link";
 import { Mail, MapPin, Github } from "lucide-react";
+import AnnouncementBanner from "@/components/announcementbanner";
 
 const pageMetadata = pagesData.home;
 
@@ -64,19 +65,12 @@ export default function Home() {
       </div>
       
       {/* Page Content */}
-      <div className="mb-6 overflow-hidden rounded-lg bg-blue-600 px-4 py-3 shadow-lg transition-all hover:bg-blue-700">
-        <div className="flex items-center justify-between flex-wrap">
-          <div className="flex flex-1 items-center">
-            <span className="flex rounded-lg bg-blue-800 p-2 text-xs font-bold uppercase tracking-wider text-white">
-              Upcoming
-            </span>
-            <p className="ml-3 truncate font-medium text-white">
-              <span className="md:hidden">Spring GIM: 1/26, 8pm @ TTC 211</span>
-              <span className="hidden md:inline">Spring GIM: Monday, 1/26 @ 8:00pm, TTC 211</span>
-            </p>
-          </div>
-        </div>
-      </div>
+      <AnnouncementBanner
+        badge="Upcoming"
+        message="Spring GIM: Monday, 1/26 @ 8:00pm, TTC 211"
+        mobileMessage="Spring GIM: 1/26, 8pm @ TTC 211"
+        variant="blue"
+      />
       
       <div className="prose max-w-none mb-8">
         <p className="mb-4">

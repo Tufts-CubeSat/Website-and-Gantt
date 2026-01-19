@@ -79,7 +79,6 @@ export default function SpaceRacoon() {
 
         {/* Right column - Image */}
         <div className="lg:col-span-1">
-          <div className="sticky top-8">
             <Image
               src="/CubeSat Onhape.png"
               alt="CubeSat Onshape Design"
@@ -88,7 +87,6 @@ export default function SpaceRacoon() {
               className="w-full h-auto rounded-lg shadow-lg"
               style={{ objectFit: "contain" }}
             />
-          </div>
         </div>
       </div>
     </main>
