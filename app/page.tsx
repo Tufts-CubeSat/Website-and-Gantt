@@ -67,9 +67,9 @@ export default function Home() {
       {/* Page Content */}
       <AnnouncementBanner
         badge="Upcoming"
-        message="Spring GIM: Monday, 1/26 @ 8:00pm, TTC 211"
-        mobileMessage="Spring GIM: 1/26, 8pm @ TTC 211"
-        variant="blue"
+        message="Spring GIM: Monday, 2/2 @ 8:00pm, TTC 211"
+        mobileMessage="Spring GIM: 2/2, 8pm @ TTC 211"
+        variant="red"
       />
       
       <div className="prose max-w-none mb-8">
