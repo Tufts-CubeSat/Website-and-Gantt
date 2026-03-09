@@ -129,6 +129,11 @@ export default function Team() {
           })}
         </div>
       </section>
+      <p>Special Thanks to: </p>
+      <ul>
+        <li>Evana Gizzi</li>
+        <li>Niclas Scheuer</li>
+      </ul>
     </main>
   );
 }
