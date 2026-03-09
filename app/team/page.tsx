@@ -87,7 +87,7 @@ export default function Team() {
       </section>
 
       {/* Team Members by Subteam */}
-      <section>
+      <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Team Members</h2>
         <div className="space-y-6">
           {Object.entries(teamData.subteams).map(([subteam, members]) => {
