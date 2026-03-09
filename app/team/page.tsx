@@ -129,11 +129,15 @@ export default function Team() {
           })}
         </div>
       </section>
-      <p>Special Thanks to: </p>
-      <ul>
-        <li>Evana Gizzi</li>
-        <li>Niclas Scheuer</li>
-      </ul>
+      <h2 className="text-2xl font-semibold mb-4">Special Thanks to: </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+          Evana Gizzi
+        </div>
+        <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+          Niclas Scheuer
+        </div>
+      </div>
     </main>
   );
 }
