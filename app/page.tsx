@@ -67,8 +67,8 @@ export default function Home() {
       {/* Page Content */}
       <AnnouncementBanner
         badge="Upcoming"
-        message="Whole Team Meeting: Monday, 3/9 @ 8:00pm, Halligan 145"
-        mobileMessage="Whole Team Meeting: 3/9, 8pm @ Halligan 145"
+        message="Whole Team Meeting: Monday, 3/23 @ 8:00pm, Halligan 145"
+        mobileMessage="Whole Team Meeting: 3/23, 8pm @ Halligan 145"
         variant="red"
       />
       
