@@ -35,3 +35,29 @@ export function getLastUpdated(): string {
     day: 'numeric'
   });
 }
+
+export function getNextMondayMeeting(): string {
+  const now = new Date();
+  const day = now.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  
+  const isMonday = day === 1;
+  const isPastCutoff = now.getHours() >= 21; // 9 PM
+  
+  // Days until next Monday
+  let daysUntilMonday: number;
+  if (isMonday && !isPastCutoff) {
+    daysUntilMonday = 0; // Still show today's meeting
+  } else if (isMonday && isPastCutoff) {
+    daysUntilMonday = 7; // Meeting passed, jump to next Monday
+  } else {
+    daysUntilMonday = (8 - day) % 7; // Next Monday from any other day
+  }
+
+  const nextMonday = new Date(now);
+  nextMonday.setDate(now.getDate() + daysUntilMonday);
+
+  // Format as M/D
+  const month = nextMonday.getMonth() + 1;
+  const date = nextMonday.getDate();
+  return `${month}/${date}`;
+}

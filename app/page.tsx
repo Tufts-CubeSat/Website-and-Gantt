@@ -1,9 +1,9 @@
 import { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
-import { getLastUpdated } from "@/lib/utils";
 import Link from "next/link";
 import { Mail, MapPin, Github } from "lucide-react";
 import AnnouncementBanner from "@/components/announcementbanner";
+import { getLastUpdated, getNextMondayMeeting } from "@/lib/utils";
 
 const pageMetadata = pagesData.home;
 
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const lastUpdated = getLastUpdated();
+  const nextMeeting = getNextMondayMeeting();
   
   return (
     <main className="min-h-screen p-8">
@@ -67,9 +68,9 @@ export default function Home() {
       {/* Page Content */}
       <AnnouncementBanner
         badge="Upcoming"
-        message="Spring GIM: Monday, 1/26 @ 8:00pm, TTC 211"
-        mobileMessage="Spring GIM: 1/26, 8pm @ TTC 211"
-        variant="blue"
+        message={`Whole Team Meeting: Monday, ${nextMeeting} @ 8:00pm, Halligan 145`}
+        mobileMessage={`Whole Team Meeting: ${nextMeeting}, 8pm @ Halligan 145`}
+        variant="red"
       />
       
       <div className="prose max-w-none mb-8">
