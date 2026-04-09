@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const pageMetadata = pagesData["space-racoon"];
+const pageMetadata = pagesData["space-raccoon"];
 
 export const metadata: Metadata = {
   title: pageMetadata.title,
@@ -11,14 +11,14 @@ export const metadata: Metadata = {
   keywords: pageMetadata.keywords,
 };
 
-export default function SpaceRacoon() {
+export default function SpaceRaccoon() {
   return (
     <main className="min-h-screen p-8">
       {/* Header with logo */}
       <div className="flex items-center gap-4 mb-8">
         <Image
           src="/android-chrome-512x512.png"
-          alt="SPACE RACOON Logo"
+          alt="SPACE RACCOON Logo"
           width={64}
           height={64}
           className="rounded-lg"
@@ -68,7 +68,7 @@ export default function SpaceRacoon() {
             <p className="text-gray-700 mb-2">
               2-3 years, specifics on{" "}
               <Link
-                href="/space-racoon/timeline"
+                href="/space-raccoon/timeline"
                 className="text-blue-600 hover:text-blue-800 hover:underline"
               >
                 Gantt Chart
