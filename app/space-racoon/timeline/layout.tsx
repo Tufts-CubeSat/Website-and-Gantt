@@ -1,7 +1,7 @@
 import { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
 
-const pageMetadata = pagesData["space-racoon-timeline"];
+const pageMetadata = pagesData["space-raccoon-timeline"];
 
 export const metadata: Metadata = {
   title: pageMetadata.title,

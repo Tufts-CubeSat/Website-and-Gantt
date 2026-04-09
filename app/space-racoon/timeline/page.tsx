@@ -295,7 +295,7 @@ export default function Timeline() {
     <main className="min-h-screen p-8">
       <h1 className="text-3xl font-semibold mb-4">Timeline</h1>
       <p className="text-gray-600 mb-6">
-        Project timeline and milestones for the SPACE RACOON CubeSat mission.
+        Project timeline and milestones for the SPACE RACCOON CubeSat mission.
       </p>
 
       {error && (

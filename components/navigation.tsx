@@ -12,11 +12,11 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "Team", href: "/team" },
   { 
-    name: "SPACE RACOON", 
-    href: "/space-racoon",
+    name: "SPACE RACCOON", 
+    href: "/space-raccoon",
     children: [
-      { name: "Overview", href: "/space-racoon" },
-      { name: "Timeline", href: "/space-racoon/timeline" },
+      { name: "Overview", href: "/space-raccoon" },
+      { name: "Timeline", href: "/space-raccoon/timeline" },
     ]
   },
   { name: "Resources", href: "/resources" },
@@ -79,8 +79,8 @@ export function Navigation() {
   };
   
   const isActive = (href: string) => {
-    if (href === "/space-racoon") {
-      // Only active if exactly /space-racoon, not subpages
+    if (href === "/space-raccoon") {
+      // Only active if exactly /space-raccoon, not subpages
       return pathname === href;
     }
     return pathname === href || pathname.startsWith(href + "/");
