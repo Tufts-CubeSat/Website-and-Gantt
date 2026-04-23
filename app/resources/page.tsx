@@ -68,6 +68,26 @@ export default function Resources() {
             <span>Google Drive</span>
             <ExternalLink className="h-4 w-4" />
           </Link>
+          <Link
+            href="https://github.com/cmu-argus-2/Avionics-Mainboard/tree/main"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            <Github className="h-5 w-5" />
+            <span>Avionics Mainboard</span>
+            <ExternalLink className="h-4 w-4" />
+          </Link>
+          <Link
+            href="https://github.com/cmu-argus-2/Avionics-BatteryBoard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            <Github className="h-5 w-5" />
+            <span>Avionics BatteryBoard</span>
+            <ExternalLink className="h-4 w-4" />
+          </Link>
         </div>
       </section>
 

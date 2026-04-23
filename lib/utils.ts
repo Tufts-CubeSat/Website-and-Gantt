@@ -24,7 +24,7 @@ export function getLastUpdated(): string {
         day: 'numeric'
       });
     }
-  } catch (error) {
+  } catch {
     // Git not available or not a git repo, fall back to build time
   }
   
@@ -37,27 +37,67 @@ export function getLastUpdated(): string {
 }
 
 export function getNextMondayMeeting(): string {
+  const meetingTimeZone = "America/New_York";
   const now = new Date();
-  const day = now.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
-  
-  const isMonday = day === 1;
-  const isPastCutoff = now.getHours() >= 21; // 9 PM
-  
-  // Days until next Monday
-  let daysUntilMonday: number;
-  if (isMonday && !isPastCutoff) {
-    daysUntilMonday = 0; // Still show today's meeting
-  } else if (isMonday && isPastCutoff) {
-    daysUntilMonday = 7; // Meeting passed, jump to next Monday
-  } else {
-    daysUntilMonday = (8 - day) % 7; // Next Monday from any other day
-  }
 
-  const nextMonday = new Date(now);
-  nextMonday.setDate(now.getDate() + daysUntilMonday);
+  const nowParts = getDatePartsInTimeZone(now, meetingTimeZone);
+  const isMonday = nowParts.weekday === 1; // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  const isPastCutoff = nowParts.hour >= 21; // 9 PM local meeting time
 
-  // Format as M/D
-  const month = nextMonday.getMonth() + 1;
-  const date = nextMonday.getDate();
-  return `${month}/${date}`;
+  const daysUntilMonday =
+    isMonday && !isPastCutoff
+      ? 0
+      : isMonday && isPastCutoff
+      ? 7
+      : (8 - nowParts.weekday) % 7;
+
+  const meetingDate = new Date(
+    Date.UTC(
+      nowParts.year,
+      nowParts.month - 1,
+      nowParts.day + daysUntilMonday,
+      12,
+      0,
+      0,
+      0
+    )
+  );
+  const meetingParts = getDatePartsInTimeZone(meetingDate, meetingTimeZone);
+
+  return `${meetingParts.month}/${meetingParts.day}`;
+}
+
+function getDatePartsInTimeZone(date: Date, timeZone: string) {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: false,
+  });
+  const parts = formatter.formatToParts(date);
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? "";
+
+  const weekdayMap: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
+
+  return {
+    year: Number(get("year")),
+    month: Number(get("month")),
+    day: Number(get("day")),
+    hour: Number(get("hour")),
+    weekday: weekdayMap[get("weekday")] ?? 0,
+  };
 }

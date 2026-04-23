@@ -43,7 +43,7 @@ export const pagesData: Record<string, PageMetadata> = {
     id: "space-raccoon-timeline",
     title: "Timeline",
     href: "/space-raccoon/timeline",
-    description: "Project timeline and milestones for the SPACE RACCOON CubeSat mission. View the Gantt chart showing project phases, dependencies, and progress.",
+    description: "Project timeline and milestones for the SPACE RACCOON CubeSat mission.",
     keywords: ["timeline", "gantt", "schedule", "milestones", "project phases", "progress", "space raccoon"],
     category: "Mission",
     priority: 9,

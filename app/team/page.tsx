@@ -22,17 +22,52 @@ const teamData = {
     role: "Project Lead",
   },
   subteamLeads: [
-    { name: "Natalie", lastName: "Germanov", role: "Structures Lead", subteam: "Structures" },
-    { name: "Jacky", lastName: "Zhao", role: "Power Lead", subteam: "Powers" },
-    { name: "Ryan", lastName: "Cooley", role: "Comms Lead", subteam: "Comms" },
-    { name: "Kyle", lastName: "Wigdor", role: "Software Lead", subteam: "Software" },
+    {
+      name: "Natalie Germanov",
+      firstName: "Natalie",
+      lastName: "Germanov",
+      role: "Structures Lead",
+      subteam: "Structures",
+    },
+    {
+      name: "Jacky Zhao",
+      firstName: "Jacky",
+      lastName: "Zhao",
+      role: "Power Lead",
+      subteam: "Power",
+    },
+    {
+      name: "Ryan Cooley",
+      firstName: "Ryan",
+      lastName: "Cooley",
+      role: "Comms Lead",
+      subteam: "Comms",
+    },
+    {
+      name: "Kyle Wigdor",
+      firstName: "Kyle",
+      lastName: "Wigdor",
+      role: "Software Lead",
+      subteam: "Software",
+    },
   ],
   subteams: {
-    Structures: ["Allie Staiger"] as string[],
-    Power: [] as string[],
-    Comms: [] as string[],
+    Structures: [
+      "Allie Staiger",
+      "Isaac Meredith",
+      "Alberto de la Villa Ramirez",
+    ] as string[],
+    Power: [
+      "Jules Crowson",
+      "Daniel Carreno",
+      "Steven Bagade",
+      "Jai Deshpande",
+    ] as string[],
+    Comms: [
+      "Brandon Douglas",
+    ] as string[],
     Software: ["Shepard Rodgers"] as string[],
-    Operations: ["Maggie Olson", "Ava"] as string[],
+    Operations: ["Maggie Olson"] as string[],
   },
 };
 
@@ -66,21 +101,21 @@ export default function Team() {
           {teamData.subteamLeads.map((lead) => (
             <div
               key={lead.subteam}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              className={
+                "flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+              }
             >
               <div>
                 <p className="font-medium">{lead.name}</p>
                 <p className="text-gray-600 text-sm">{lead.role}</p>
               </div>
-              {lead.lastName && (
-                <a
-                  href={`mailto:${getEmail(lead.name, lead.lastName)}`}
-                  className="text-blue-600 hover:text-blue-800"
-                  title={`Email ${lead.name} ${lead.lastName}`}
-                >
-                  <Mail className="h-5 w-5" />
-                </a>
-              )}
+              <a
+                href={`mailto:${getEmail(lead.firstName, lead.lastName)}`}
+                className="text-blue-600 hover:text-blue-800"
+                title={`Email ${lead.name}`}
+              >
+                <Mail className="h-5 w-5" />
+              </a>
             </div>
           ))}
         </div>
@@ -91,21 +126,30 @@ export default function Team() {
         <h2 className="text-2xl font-semibold mb-4">Team Members</h2>
         <div className="space-y-6">
           {Object.entries(teamData.subteams).map(([subteam, members]) => {
-            const lead = teamData.subteamLeads.find((l) => l.subteam === subteam);
             return (
-              <div key={subteam} className="border border-gray-200 rounded-lg p-4">
+              <div
+                key={subteam}
+                className="border border-gray-200 rounded-lg p-4"
+              >
                 <h3 className="text-xl font-semibold mb-3 text-gray-800">
                   {subteam}
                 </h3>
                 {members.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div
+                    className={
+                      "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+                    }
+                  >
                     {members.map((member) => {
                       const [firstName, ...lastNameParts] = member.split(" ");
                       const lastName = lastNameParts.join(" ");
                       return (
                         <div
                           key={member}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded"
+                          className={
+                            "flex items-center justify-between " +
+                            "p-3 bg-gray-50 rounded"
+                          }
                         >
                           <span className="text-sm">{member}</span>
                           <a
@@ -133,11 +177,33 @@ export default function Team() {
       <section>
         <h2 className="text-2xl font-semibold mb-4">Special Thanks to: </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+          <div
+            className={
+              "flex items-center justify-between p-3 bg-gray-50 rounded"
+            }
+          >
             Evana Gizzi
           </div>
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded">
+          <div
+            className={
+              "flex items-center justify-between p-3 bg-gray-50 rounded"
+            }
+          >
             Niclas Scheuer
+          </div>
+        </div>
+      </section>
+      <section className="mt-8">
+        <h2 className="text-2xl font-semibold mb-4">Alumni</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="flex items-center p-3 bg-gray-50 rounded">
+            Andy Navarro
+          </div>
+          <div className="flex items-center p-3 bg-gray-50 rounded">
+            Vanessa Bellotti
+          </div>
+          <div className="flex items-center p-3 bg-gray-50 rounded">
+            Trevor Wallace
           </div>
         </div>
       </section>
