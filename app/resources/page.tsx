@@ -91,6 +91,27 @@ export default function Resources() {
         </div>
       </section>
 
+      {/* Contributions Section */}
+      <section className="pb-8">
+        <h2 className="text-2xl font-semibold mb-4">Contributions</h2>
+
+        <div className="flex flex-wrap gap-4">
+          <Link
+            href="https://nscheuer.github.io/Generalized_ADCS/index.html#"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            <span>Generalized ADCS</span>
+            <ExternalLink className="h-4 w-4" />
+          </Link>
+        </div>
+        <p className="text-gray-700 mt-1">
+            A Python-first framework for simulating spacecraft attitude dynamics, 
+            estimation, and control in orbit.
+        </p>
+      </section>
+
       {/* Embedded Documents Section */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Documents</h2>
