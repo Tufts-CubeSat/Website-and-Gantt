@@ -1,6 +1,8 @@
 import { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
 import { Mail } from "lucide-react";
+import AnnouncementBanner from "@/components/announcementbanner";
+import { getNextMondayMeeting } from "@/lib/utils";
 
 const pageMetadata = pagesData.team;
 
@@ -72,9 +74,18 @@ const teamData = {
 };
 
 export default function Team() {
+  const nextMeeting = getNextMondayMeeting();
+
   return (
     <main className="min-h-screen p-8">
       <h1 className="text-3xl font-semibold mb-6">{pageMetadata.title}</h1>
+
+      <AnnouncementBanner
+        badge="Upcoming"
+        message={`Whole Team Meeting: Monday, ${nextMeeting} @ 8:00pm, Halligan 145`}
+        mobileMessage={`Whole Team Meeting: ${nextMeeting}, 8pm @ Halligan 145`}
+        variant="red"
+      />
       
       {/* Project Lead */}
       <section className="mb-8">

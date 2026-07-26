@@ -79,6 +79,20 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --shell-header: #f8fafc;
+  --shell-sidebar: #f1f5f9;
+  --shell-text: #0f172a;
+  --shell-muted: #475569;
+  --shell-border: rgba(15, 23, 42, 0.14);
+  --shell-hover: rgba(15, 23, 42, 0.07);
+  --shell-accent: #1261a6;
+  --home-bg: #eef4fa;
+  --home-panel: #f8fafc;
+  --home-text: #0b1728;
+  --home-muted: #475569;
+  --home-signal: #075ea8;
+  --home-border: rgba(15, 23, 42, 0.14);
+  --home-star: rgba(15, 23, 42, 0.42);
 }
 
 .dark {
@@ -113,6 +127,20 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --shell-header: #060d18;
+  --shell-sidebar: #091321;
+  --shell-text: #f1f5f9;
+  --shell-muted: #b7c4d4;
+  --shell-border: rgba(255, 255, 255, 0.13);
+  --shell-hover: rgba(255, 255, 255, 0.08);
+  --shell-accent: #69b7ff;
+  --home-bg: #060d18;
+  --home-panel: #091321;
+  --home-text: #f1f5f9;
+  --home-muted: #aebdce;
+  --home-signal: #69b7ff;
+  --home-border: rgba(255, 255, 255, 0.13);
+  --home-star: rgba(255, 255, 255, 0.62);
 }
 
 @layer base {
@@ -121,5 +149,182 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.site-header {
+  background: color-mix(in srgb, var(--shell-header) 94%, transparent);
+  border-bottom: 1px solid var(--shell-border);
+  box-shadow: 0 4px 24px rgba(2, 8, 23, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.site-sidebar {
+  color: var(--shell-text);
+  background:
+    radial-gradient(circle at 0 0, color-mix(in srgb, var(--shell-accent) 8%, transparent), transparent 46%),
+    var(--shell-sidebar);
+}
+
+/* The navigation predates semantic theme tokens; keep its state classes
+   while mapping their colors to the accessible shell palette. */
+.site-sidebar .text-black {
+  color: var(--shell-text) !important;
+}
+
+.site-sidebar .text-black\/60 {
+  color: var(--shell-muted) !important;
+}
+
+.site-sidebar .hover\:text-black:hover {
+  color: var(--shell-text) !important;
+}
+
+.site-sidebar .bg-black {
+  background-color: var(--shell-accent) !important;
+}
+
+.shell-focus:focus-visible,
+.site-sidebar a:focus-visible,
+.site-sidebar button:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 4px;
+}
+
+.dark .theme-icon-light {
+  display: block;
+}
+
+.dark .theme-icon-dark {
+  display: none;
+}
+
+/* Homepage landing atmosphere */
+.home-landing {
+  --home-ink: var(--home-bg);
+  --home-fog: var(--home-text);
+  font-family: var(--font-home-body), system-ui, sans-serif;
+}
+
+.home-stars {
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, var(--home-star), transparent),
+    radial-gradient(1px 1px at 28% 62%, var(--home-star), transparent),
+    radial-gradient(1.5px 1.5px at 44% 28%, var(--home-star), transparent),
+    radial-gradient(1px 1px at 61% 74%, var(--home-star), transparent),
+    radial-gradient(1px 1px at 76% 22%, var(--home-star), transparent),
+    radial-gradient(1.5px 1.5px at 88% 58%, var(--home-star), transparent),
+    radial-gradient(1px 1px at 18% 88%, var(--home-star), transparent),
+    radial-gradient(1px 1px at 52% 48%, var(--home-star), transparent);
+  animation: home-stars-drift 48s linear infinite;
+  opacity: 0.85;
+}
+
+.home-orbit {
+  background:
+    linear-gradient(115deg, transparent 0%, color-mix(in srgb, var(--home-signal) 8%, transparent) 42%, transparent 68%),
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 72px,
+      color-mix(in srgb, var(--home-text) 3%, transparent) 72px,
+      color-mix(in srgb, var(--home-text) 3%, transparent) 73px
+    );
+  mask-image: radial-gradient(ellipse 80% 70% at 70% 40%, black, transparent);
+}
+
+.home-satellite-float {
+  animation: home-satellite-float 7s ease-in-out infinite;
+}
+
+.home-satellite-glow {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--home-signal) 18%, transparent) 0%,
+    color-mix(in srgb, var(--home-signal) 6%, transparent) 42%,
+    transparent 70%
+  );
+  animation: home-glow-pulse 5.5s ease-in-out infinite;
+}
+
+/* Theme legacy content surfaces without changing their layout. */
+.dark main:not(.home-landing) .text-gray-500,
+.dark main:not(.home-landing) .text-gray-600,
+.dark main:not(.home-landing) .text-gray-700,
+.dark main:not(.home-landing) .text-gray-800,
+.dark main:not(.home-landing) .text-gray-900 {
+  color: var(--muted-foreground) !important;
+}
+
+.dark main:not(.home-landing) .bg-gray-50,
+.dark main:not(.home-landing) .bg-gray-100 {
+  background-color: var(--card) !important;
+}
+
+.dark main:not(.home-landing) .hover\:bg-gray-200:hover {
+  background-color: var(--accent) !important;
+}
+
+.dark main:not(.home-landing) .border-gray-200,
+.dark main:not(.home-landing) .border-gray-300 {
+  border-color: var(--border) !important;
+}
+
+.dark main:not(.home-landing) .text-blue-600 {
+  color: #79bfff !important;
+}
+
+.dark main:not(.home-landing) .hover\:text-blue-800:hover {
+  color: #b8dcff !important;
+}
+
+@keyframes home-stars-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-24px, 18px, 0);
+  }
+}
+
+@keyframes home-satellite-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1deg);
+  }
+}
+
+@keyframes home-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-stars,
+  .home-satellite-float,
+  .home-satellite-glow {
+    animation: none;
   }
 }

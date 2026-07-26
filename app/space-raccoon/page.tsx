@@ -46,7 +46,7 @@ export default function SpaceRaccoon() {
             <h2 className="text-2xl font-semibold mb-3">THE PAYLOAD</h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
               <li>GoPro camera and any necessary boards</li>
-              <li>Input: Power, "take photo" command</li>
+              <li>Input: Power, &quot;take photo&quot; command</li>
               <li>Output: Photo</li>
               <li>Be able to have a script running that requests images during certain times in the orbit</li>
               <li>We have scheduled times during orbit when we know we want to take photos (when are the ideal times and locations to capture images of space debris) and then during those times, we take a photo every 30 seconds and store it</li>

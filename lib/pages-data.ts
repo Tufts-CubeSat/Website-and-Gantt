@@ -14,10 +14,22 @@ import { createPageMetadata, type PageMetadata } from "./page-metadata";
 export const pagesData: Record<string, PageMetadata> = {
   home: createPageMetadata({
     id: "home",
-    title: "Home",
+    title: "Tufts CubeSat Team",
     href: "/",
-    description: "The Tufts CubeSat team is executing the SPACE RACCOON mission, a 14-month initiative to develop a compact 2U satellite for detecting, classifying, and assessing space debris in Low Earth Orbit using advanced computer vision and machine learning.",
-    keywords: ["home", "landing", "main", "overview", "tufts", "cubesat", "space raccoon", "debris detection", "satellite"],
+    description:
+      "Tufts University's first CubeSat mission. The Tufts CubeSat Team is building SPACE RACCOON, a 2U satellite that detects, classifies, and assesses space debris risk in Low Earth Orbit using onboard computer vision and machine learning.",
+    keywords: [
+      "home",
+      "landing",
+      "main",
+      "overview",
+      "tufts",
+      "cubesat",
+      "tufts cubesat team",
+      "space raccoon",
+      "debris detection",
+      "satellite",
+    ],
     category: "Main",
     priority: 10,
   }),
