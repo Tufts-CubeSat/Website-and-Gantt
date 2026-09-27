@@ -93,6 +93,12 @@
   --home-signal: #075ea8;
   --home-border: rgba(15, 23, 42, 0.14);
   --home-star: rgba(15, 23, 42, 0.42);
+  --home-earth: #bcd6ee;
+  --home-earth-edge: #7fb0de;
+  --home-debris: #334155;
+  --home-risk-low: #16a34a;
+  --home-risk-med: #d97706;
+  --home-risk-high: #dc2626;
 }
 
 .dark {
@@ -141,6 +147,12 @@
   --home-signal: #69b7ff;
   --home-border: rgba(255, 255, 255, 0.13);
   --home-star: rgba(255, 255, 255, 0.62);
+  --home-earth: #0c2340;
+  --home-earth-edge: #2f7fd0;
+  --home-debris: #e2e8f0;
+  --home-risk-low: #4ade80;
+  --home-risk-med: #fbbf24;
+  --home-risk-high: #f87171;
 }
 
 @layer base {
@@ -321,7 +333,99 @@ body {
   }
 }
 
+/* Scroll reveal (components/home/reveal.tsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+}
+
+.reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Mission story: panels stack in normal flow until GSAP takes over */
+.story[data-animated="true"] .story-panel {
+  position: absolute;
+  inset: 0;
+}
+
+.story[data-animated="true"] .story-pin {
+  min-height: calc(100vh - 4rem);
+  /* Earth bleeds sideways and down, but not into the next section. */
+  overflow-y: clip;
+}
+
+/* Static fallback: keep the scene inside its own box so Earth never covers the text. */
+.story:not([data-animated="true"]) .story-scene svg {
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.story[data-animated="true"] .story-panels {
+  min-height: 17rem;
+}
+
+.story:not([data-animated="true"]) .story-rail {
+  visibility: hidden;
+}
+
+@media (min-width: 768px) {
+  .story:not([data-animated="true"]) .story-scene {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+}
+
+/* The exploded CubeSat renders ~0.4x on phones; enlarge its labels there. */
+@media (max-width: 767px) {
+  .c-label-title {
+    font-size: 22px;
+  }
+  .c-label-owner {
+    font-size: 16px;
+  }
+}
+
+.story-chip {
+  border: 1px solid var(--home-border);
+  background: color-mix(in srgb, var(--home-signal) 7%, transparent);
+}
+
+.home-panel-surface {
+  background: color-mix(in srgb, var(--home-panel) 86%, transparent);
+  border: 1px solid var(--home-border);
+  backdrop-filter: blur(8px);
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
   .home-stars,
   .home-satellite-float,
   .home-satellite-glow {

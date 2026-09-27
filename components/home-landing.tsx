@@ -3,24 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowRight, Github, Mail, MapPin } from "lucide-react";
+import { ArrowDown, ArrowRight, Github, Mail, MapPin } from "lucide-react";
+import { StarfieldCanvas } from "./home/starfield-canvas";
+import { MissionStory } from "./home/mission-story";
+import { ExplodedCubeSat } from "./home/exploded-cubesat";
+import { SubteamGrid } from "./home/subteam-grid";
+import { Roadmap } from "./home/roadmap";
+import { EmployerMarquee } from "./home/employer-marquee";
 
-const pillars = [
-  {
-    label: "Vision payload",
-    detail:
-      "Modified GoPro hardware paired with onboard ML to detect and classify debris streaks.",
-  },
-  {
-    label: "Open source",
-    detail:
-      "Flight software and data released for the aerospace community and future missions.",
-  },
-  {
-    label: "Full stack build",
-    detail:
-      "Structures, power, RF, and radiation-hardened systems engineered in parallel.",
-  },
+const missionStats = [
+  { value: "2U", label: "CubeSat form factor" },
+  { value: "LEO", label: "Low Earth Orbit" },
+  { value: "14 mo", label: "Mission duration" },
+  { value: "2029", label: "Target launch" },
 ];
 
 export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
@@ -32,8 +27,8 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
   }, []);
 
   return (
-    <main className="home-landing relative min-h-[calc(100vh-4rem)] overflow-hidden bg-[var(--home-ink)] text-[var(--home-fog)]">
-      <div className="home-stars pointer-events-none absolute inset-0" aria-hidden />
+    <main className="home-landing relative min-h-[calc(100vh-4rem)] overflow-x-clip bg-[var(--home-ink)] text-[var(--home-fog)]">
+      <StarfieldCanvas className="fixed inset-0 z-0" />
       <div className="home-orbit pointer-events-none absolute inset-0" aria-hidden />
       <div
         className="pointer-events-none absolute -right-24 top-1/4 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,color-mix(in_srgb,var(--home-signal)_16%,transparent),transparent_68%)]"
@@ -41,7 +36,7 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
       />
 
       {/* Hero */}
-      <section className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-10 px-6 py-12 md:grid-cols-[1.05fr_0.95fr] md:gap-6 md:px-10 lg:px-14">
+      <section className="relative mx-auto grid min-h-[calc(100vh-4rem)] content-center max-w-7xl items-center gap-10 px-6 py-12 md:grid-cols-[1.05fr_0.95fr] md:gap-6 md:px-10 lg:px-14">
         <div
           className={`relative z-10 max-w-xl transition-all duration-1000 ease-out ${
             ready ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
@@ -73,6 +68,17 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
               Meet the team
             </Link>
           </div>
+          <dl className="mt-10 grid max-w-md grid-cols-4 gap-4 border-t border-[var(--home-border)] pt-6">
+            {missionStats.map((stat) => (
+              <div key={stat.label}>
+                <dt className="sr-only">{stat.label}</dt>
+                <dd className="font-[family-name:var(--font-home-display)] text-xl font-bold text-[var(--home-text)] sm:text-2xl">
+                  {stat.value}
+                </dd>
+                <dd className="mt-1 text-[11px] leading-tight text-[var(--home-muted)]">{stat.label}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
         <div
@@ -92,40 +98,25 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
             />
           </div>
         </div>
+
+        <a
+          href="#story-heading"
+          className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--home-muted)] transition-colors hover:text-[var(--home-text)] md:flex"
+        >
+          Scroll the mission <ArrowDown className="h-3.5 w-3.5 motion-safe:animate-bounce" />
+        </a>
       </section>
 
-      {/* Mission pillars */}
-      <section className="relative border-t border-[var(--home-border)] px-6 py-16 md:px-10 lg:px-14">
-        <div className="mx-auto max-w-7xl">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">
-            2025–2026 development
-          </p>
-          <h2 className="mb-10 max-w-xl font-[family-name:var(--font-home-display)] text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
-            Edge-of-orbit engineering, built on campus.
-          </h2>
-          <ul className="grid gap-10 md:grid-cols-3 md:gap-8">
-            {pillars.map((pillar, index) => (
-              <li
-                key={pillar.label}
-                className={`transition-all duration-700 ease-out ${
-                  ready ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-                }`}
-                style={{ transitionDelay: `${400 + index * 120}ms` }}
-              >
-                <p className="mb-2 font-[family-name:var(--font-home-display)] text-lg font-semibold text-[var(--home-text)]">
-                  {pillar.label}
-                </p>
-                <p className="text-sm leading-relaxed text-[var(--home-muted)]">
-                  {pillar.detail}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <div className="relative z-10">
+        <MissionStory />
+        <ExplodedCubeSat />
+        <SubteamGrid />
+        <Roadmap />
+        <EmployerMarquee />
+      </div>
 
       {/* Contact strip */}
-      <section className="relative border-t border-[var(--home-border)] px-6 py-10 md:px-10 lg:px-14">
+      <section className="relative z-10 border-t border-[var(--home-border)] px-6 py-10 md:px-10 lg:px-14">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-wrap gap-8 text-sm">
             <a

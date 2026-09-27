@@ -12,6 +12,7 @@ import { ThemeToggle } from "./theme-toggle";
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Team", href: "/team" },
+  { name: "Subteams", href: "/subteams" },
   { 
     name: "SPACE RACCOON", 
     href: "/space-raccoon",
