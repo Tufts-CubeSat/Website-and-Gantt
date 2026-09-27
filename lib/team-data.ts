@@ -159,7 +159,7 @@ export const subteams: Subteam[] = [
     color: "#fb7185",
     about: [
       "A weather balloon is a giant helium balloon attached to a box of electronics. It climbs to near space (around 100,000 ft) and captures incredible footage of the curvature of the Earth, then falls back to the ground a few hours later for us to recover.",
-      "It isn't a CubeSat subsystem, but it's an extremely useful way to test electronics and communications systems before we build and launch the CubeSat, which is why many CubeSat programs run ballooning projects.",
+      "It isn't a CubeSat subsystem, but it's an extremely useful way to test electronics and communications systems before we build and launch the CubeSat, which is why many CubeSat programs (including ours!) run ballooning projects.",
     ],
     whatWeDo: ["Balloon research", "Payload box design", "Launch-day logistics", "Flight tracking"],
     whyJoin: [
@@ -186,7 +186,7 @@ export const subteams: Subteam[] = [
 ];
 
 export const members: Member[] = [
-  { name: "Will Goldman", slug: "william-goldman", roles: ["Project Lead", "Software Lead"], subteams: ["software"], lead: "project" },
+  { name: "Will Goldman", slug: "william-goldman", roles: ["Project Lead", "Software Lead"], subteams: ["software"], lead: "project", linkedin: "https://www.linkedin.com/in/william-goldman-79125a283/", website: "https://goldmanwilliam.com", },
   { name: "Natalie Germanov", slug: "natalie-germanov", roles: ["Project Lead", "Structures Lead"], subteams: ["structures"], lead: "project" },
   { name: "Jacky Zhao", slug: "jacky-zhao", roles: ["Power Lead"], subteams: ["power"], lead: "subteam" },
   { name: "Ryan Cooley", slug: "ryan-cooley", roles: ["Comms Lead"], subteams: ["comms"], lead: "subteam" },
