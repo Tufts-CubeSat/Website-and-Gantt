@@ -89,7 +89,7 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
           <div className="home-satellite-glow absolute inset-[12%] rounded-full" aria-hidden />
           <div className="home-satellite-float relative w-full max-w-lg">
             <Image
-              src="/CubeSat Onhape.png"
+              src="/cubesat-remove-background-clear.png"
               alt="SPACE RACCOON CubeSat CAD model with exploded internal stack"
               width={900}
               height={900}
