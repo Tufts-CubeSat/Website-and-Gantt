@@ -36,26 +36,32 @@ export function getLastUpdated(): string {
   });
 }
 
-export function getNextMondayMeeting(): string {
+/**
+ * Returns the M/D date of the next weekly meeting in Boston time.
+ *
+ * @param weekday - Meeting day, 0 = Sun, 1 = Mon, ..., 6 = Sat
+ * @param cutoffHour - Local hour after which today's meeting counts as past
+ */
+export function getNextMeeting(weekday: number, cutoffHour: number): string {
   const meetingTimeZone = "America/New_York";
   const now = new Date();
 
   const nowParts = getDatePartsInTimeZone(now, meetingTimeZone);
-  const isMonday = nowParts.weekday === 1; // 0 = Sun, 1 = Mon, ..., 6 = Sat
-  const isPastCutoff = nowParts.hour >= 21; // 9 PM local meeting time
+  const isMeetingDay = nowParts.weekday === weekday;
+  const isPastCutoff = nowParts.hour >= cutoffHour;
 
-  const daysUntilMonday =
-    isMonday && !isPastCutoff
+  const daysUntilMeeting =
+    isMeetingDay && !isPastCutoff
       ? 0
-      : isMonday && isPastCutoff
+      : isMeetingDay && isPastCutoff
       ? 7
-      : (8 - nowParts.weekday) % 7;
+      : (weekday - nowParts.weekday + 7) % 7;
 
   const meetingDate = new Date(
     Date.UTC(
       nowParts.year,
       nowParts.month - 1,
-      nowParts.day + daysUntilMonday,
+      nowParts.day + daysUntilMeeting,
       12,
       0,
       0,

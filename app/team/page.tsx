@@ -1,8 +1,22 @@
 import { pagesData } from "@/lib/pages-data";
 import type { Metadata } from "next";
-import { Mail } from "lucide-react";
+import Link from "next/link";
+import { Github, Globe, Linkedin, Mail } from "lucide-react";
 import AnnouncementBanner from "@/components/announcementbanner";
-import { getNextMondayMeeting } from "@/lib/utils";
+import { MemberAvatar } from "@/components/member-avatar";
+import { Reveal } from "@/components/home/reveal";
+import { getNextMeeting } from "@/lib/utils";
+import { getMemberPhoto } from "@/lib/team-photos";
+import {
+  allTeamMeeting,
+  alumni,
+  getMemberEmail,
+  getSubteam,
+  members,
+  specialThanks,
+  subteams,
+  type Member,
+} from "@/lib/team-data";
 
 const pageMetadata = pagesData.team;
 
@@ -12,212 +26,167 @@ export const metadata: Metadata = {
   keywords: pageMetadata.keywords,
 };
 
-// Helper function to create email from name
-function getEmail(firstName: string, lastName: string): string {
-  return `${firstName.toLowerCase()}.${lastName.toLowerCase()}@tufts.edu`;
+function websiteLabel(url: string): { label: string; isGithub: boolean } {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    return { label: host === "github.com" ? "GitHub" : "Website", isGithub: host === "github.com" };
+  } catch {
+    return { label: "Website", isGithub: false };
+  }
 }
 
-// Team data structure
-const teamData = {
-  projectLead: {
-    name: "William Goldman",
-    role: "Project Lead",
-  },
-  subteamLeads: [
-    {
-      name: "Natalie Germanov",
-      firstName: "Natalie",
-      lastName: "Germanov",
-      role: "Structures Lead",
-      subteam: "Structures",
-    },
-    {
-      name: "Jacky Zhao",
-      firstName: "Jacky",
-      lastName: "Zhao",
-      role: "Power Lead",
-      subteam: "Power",
-    },
-    {
-      name: "Ryan Cooley",
-      firstName: "Ryan",
-      lastName: "Cooley",
-      role: "Comms Lead",
-      subteam: "Comms",
-    },
-    {
-      name: "Kyle Wigdor",
-      firstName: "Kyle",
-      lastName: "Wigdor",
-      role: "Software Lead",
-      subteam: "Software",
-    },
-  ],
-  subteams: {
-    Structures: [
-      "Allie Staiger",
-      "Isaac Meredith",
-      "Alberto de la Villa Ramirez",
-    ] as string[],
-    Power: [
-      "Jules Crowson",
-      "Daniel Carreno",
-      "Steven Bagade",
-      "Jai Deshpande",
-    ] as string[],
-    Comms: [
-      "Brandon Douglas",
-    ] as string[],
-    Software: ["Shepard Rodgers"] as string[],
-    Operations: ["Maggie Olson"] as string[],
-  },
-};
-
-export default function Team() {
-  const nextMeeting = getNextMondayMeeting();
+function MemberCard({ member, size = "md" }: { member: Member; size?: "md" | "lg" }) {
+  const color = getSubteam(member.subteams[0]).color;
+  const email = getMemberEmail(member);
 
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-semibold mb-6">{pageMetadata.title}</h1>
-
-      <AnnouncementBanner
-        badge="Upcoming"
-        message={`Whole Team Meeting: Monday, ${nextMeeting} @ 8:00pm, Halligan 145`}
-        mobileMessage={`Whole Team Meeting: ${nextMeeting}, 8pm @ Halligan 145`}
-        variant="red"
-      />
-      
-      {/* Project Lead */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Project Lead</h2>
-        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-          <div>
-            <p className="font-medium text-lg">{teamData.projectLead.name}</p>
-            <p className="text-gray-600">{teamData.projectLead.role}</p>
-          </div>
+    <div className="home-panel-surface flex h-full items-center gap-4 p-3 pr-4">
+      <MemberAvatar name={member.name} photo={getMemberPhoto(member.slug)} color={color} size={size} />
+      <div className="min-w-0">
+        <p className={`font-semibold text-[var(--home-text)] ${size === "lg" ? "text-xl" : ""}`}>{member.name}</p>
+        {member.roles.map((role) => (
+          <p key={role} className="text-sm text-[var(--home-muted)]">
+            {role}
+          </p>
+        ))}
+        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
           <a
-            href={`mailto:${getEmail("William", "Goldman")}`}
-            className="ml-auto text-blue-600 hover:text-blue-800"
-            title={`Email ${teamData.projectLead.name}`}
+            href={`mailto:${email}`}
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--home-signal)] hover:underline"
+            title={`Email ${member.name}`}
           >
-            <Mail className="h-5 w-5" />
+            <Mail className="h-3.5 w-3.5" />
+            Email
           </a>
-        </div>
-      </section>
-
-      {/* Subteam Leads */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Subteam Leads</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {teamData.subteamLeads.map((lead) => (
-            <div
-              key={lead.subteam}
-              className={
-                "flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-              }
+          {member.linkedin && (
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--home-signal)] hover:underline"
+              title={`${member.name} on LinkedIn`}
             >
-              <div>
-                <p className="font-medium">{lead.name}</p>
-                <p className="text-gray-600 text-sm">{lead.role}</p>
+              <Linkedin className="h-3.5 w-3.5" />
+              LinkedIn
+            </a>
+          )}
+          {member.website &&
+            (() => {
+              const { label, isGithub } = websiteLabel(member.website);
+              const Icon = isGithub ? Github : Globe;
+              return (
+                <a
+                  href={member.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--home-signal)] hover:underline"
+                  title={`${member.name}'s ${label}`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {label}
+                </a>
+              );
+            })()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Team() {
+  // All-team meeting: Tuesdays; roll over to next week after 7:30pm.
+  const nextMeeting = getNextMeeting(2, 20);
+  const projectLeads = members.filter((m) => m.lead === "project");
+  const teamsWithMembers = subteams.map((subteam) => ({
+    subteam,
+    people: members.filter((m) => m.lead !== "project" && m.subteams.includes(subteam.id)),
+  }));
+
+  return (
+    <main className="home-landing min-h-screen bg-[var(--home-ink)] px-6 py-10 text-[var(--home-fog)] md:px-10 lg:px-14">
+      <div className="mx-auto max-w-6xl">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Fall 2026</p>
+        <h1 className="mb-6 font-[family-name:var(--font-home-display)] text-4xl font-bold tracking-tight text-[var(--home-text)]">
+          {pageMetadata.title}
+        </h1>
+
+        <AnnouncementBanner
+          badge="Upcoming"
+          message={`All-Team Meeting: Tuesday, ${nextMeeting} @ ${allTeamMeeting.time.split(" ")[0]}, ${allTeamMeeting.location}`}
+          mobileMessage={`All-Team: Tue ${nextMeeting}, ${allTeamMeeting.time.split(" ")[0]} @ ${allTeamMeeting.location}`}
+          variant="red"
+        />
+
+        <section className="mb-14">
+          <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Project Leads</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {projectLeads.map((member, i) => (
+              <Reveal key={member.slug} delay={i * 100}>
+                <MemberCard member={member} size="lg" />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-14 space-y-10">
+          {teamsWithMembers.map(({ subteam, people }) => (
+            <div key={subteam.id} id={subteam.id} className="scroll-mt-24">
+              <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--home-border)] pb-2">
+                <h2 className="flex items-center gap-3 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">
+                  <span className="h-3 w-3 rounded-full" style={{ background: subteam.color }} aria-hidden />
+                  {subteam.name}
+                  {subteam.isNew && (
+                    <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--home-bg)]" style={{ background: subteam.color }}>
+                      New
+                    </span>
+                  )}
+                </h2>
+                <Link href={`/subteams#${subteam.id}`} className="text-sm text-[var(--home-signal)] hover:underline">
+                  About {subteam.name} →
+                </Link>
               </div>
-              <a
-                href={`mailto:${getEmail(lead.firstName, lead.lastName)}`}
-                className="text-blue-600 hover:text-blue-800"
-                title={`Email ${lead.name}`}
-              >
-                <Mail className="h-5 w-5" />
-              </a>
+              {people.length > 0 ? (
+                <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {people
+                    .sort((a, b) => Number(!!b.lead) - Number(!!a.lead))
+                    .map((member, i) => (
+                      <Reveal as="li" key={member.slug} delay={i * 70}>
+                        <MemberCard member={member} />
+                      </Reveal>
+                    ))}
+                </ul>
+              ) : (
+                <p className="text-sm italic text-[var(--home-muted)]">
+                  {subteam.isNew ? "Just getting started. Come to a meeting to join!" : "No members yet."}
+                </p>
+              )}
             </div>
           ))}
-        </div>
-      </section>
+        </section>
 
-      {/* Team Members by Subteam */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Team Members</h2>
-        <div className="space-y-6">
-          {Object.entries(teamData.subteams).map(([subteam, members]) => {
-            return (
-              <div
-                key={subteam}
-                className="border border-gray-200 rounded-lg p-4"
-              >
-                <h3 className="text-xl font-semibold mb-3 text-gray-800">
-                  {subteam}
-                </h3>
-                {members.length > 0 ? (
-                  <div
-                    className={
-                      "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-                    }
-                  >
-                    {members.map((member) => {
-                      const [firstName, ...lastNameParts] = member.split(" ");
-                      const lastName = lastNameParts.join(" ");
-                      return (
-                        <div
-                          key={member}
-                          className={
-                            "flex items-center justify-between " +
-                            "p-3 bg-gray-50 rounded"
-                          }
-                        >
-                          <span className="text-sm">{member}</span>
-                          <a
-                            href={`mailto:${getEmail(firstName, lastName)}`}
-                            className="text-blue-600 hover:text-blue-800 ml-2"
-                            title={`Email ${member}`}
-                          >
-                            <Mail className="h-4 w-4" />
-                          </a>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-sm italic">
-                    No subteam members yet
-                  </p>
-                )}
-              </div>
-            );
-          })}
+        <div className="grid gap-10 md:grid-cols-2">
+          <section>
+            <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Special Thanks</h2>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {specialThanks.map((name) => (
+                <li key={name} className="home-panel-surface p-3 text-sm text-[var(--home-text)]">
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Alumni</h2>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {alumni.map((name) => (
+                <li key={name} className="home-panel-surface p-3 text-sm text-[var(--home-text)]">
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">Special Thanks to: </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div
-            className={
-              "flex items-center justify-between p-3 bg-gray-50 rounded"
-            }
-          >
-            Evana Gizzi
-          </div>
-          <div
-            className={
-              "flex items-center justify-between p-3 bg-gray-50 rounded"
-            }
-          >
-            Niclas Scheuer
-          </div>
-        </div>
-      </section>
-      <section className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Alumni</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div className="flex items-center p-3 bg-gray-50 rounded">
-            Andy Navarro
-          </div>
-          <div className="flex items-center p-3 bg-gray-50 rounded">
-            Vanessa Bellotti
-          </div>
-          <div className="flex items-center p-3 bg-gray-50 rounded">
-            Trevor Wallace
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
   );
 }
