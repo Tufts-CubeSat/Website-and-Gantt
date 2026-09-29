@@ -186,7 +186,7 @@ export const subteams: Subteam[] = [
 ];
 
 export const members: Member[] = [
-  { name: "Will Goldman", slug: "william-goldman", roles: ["Project Lead", "Software Lead"], subteams: ["software"], lead: "project", linkedin: "https://www.linkedin.com/in/william-goldman-79125a283/", website: "https://goldmanwilliam.com", },
+  { name: "William Goldman", slug: "william-goldman", roles: ["Project Lead", "Software Lead"], subteams: ["software"], lead: "project", linkedin: "https://www.linkedin.com/in/william-goldman-79125a283/", website: "https://goldmanwilliam.com", },
   { name: "Natalie Germanov", slug: "natalie-germanov", roles: ["Project Lead", "Structures Lead"], subteams: ["structures"], lead: "project" },
   { name: "Jacky Zhao", slug: "jacky-zhao", roles: ["Power Lead"], subteams: ["power"], lead: "subteam" },
   { name: "Ryan Cooley", slug: "ryan-cooley", roles: ["Comms Lead"], subteams: ["comms"], lead: "subteam" },
