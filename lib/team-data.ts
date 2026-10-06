@@ -190,19 +190,42 @@ export const members: Member[] = [
   { name: "Natalie Germanov", slug: "natalie-germanov", roles: ["Project Lead", "Structures Lead"], subteams: ["structures"], lead: "project" },
   { name: "Jacky Zhao", slug: "jacky-zhao", roles: ["Power Lead"], subteams: ["power"], lead: "subteam" },
   { name: "Ryan Cooley", slug: "ryan-cooley", roles: ["Comms Lead"], subteams: ["comms"], lead: "subteam" },
+  { name: "Adonis Deking", slug: "adonis-deking", roles: ["Structures Member"], subteams: ["structures"], website: "https://adonisdeking.com" },
   { name: "Allie Staiger", slug: "allie-staiger", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Isaac Meredith", slug: "isaac-meredith", roles: ["Structures Member"], subteams: ["structures"] },
+  { name: "Molly Kreitman", slug: "molly-kreitman", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Steven Bagade", slug: "steven-bagade", roles: ["Power Member"], subteams: ["power"] },
   { name: "Daniel Carreno", slug: "daniel-carreno", roles: ["Power Member"], subteams: ["power"] },
   { name: "Jules Crowson", slug: "jules-crowson", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Evey Slavik", slug: "evey-slavik", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Max Chen", slug: "max-chen", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Sean Ozalpasan", slug: "sean-ozalpasan", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Maksim Mandel", slug: "maksim-mandel", roles: ["Comms Member"], subteams: ["comms"] },
+  { name: "Gabriel Krauze", slug: "gabriel-krauze", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Brandon Douglas", slug: "brandon-douglas", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Shepard Rogers", slug: "shepard-rogers", roles: ["Software Member"], subteams: ["software"] },
+  { name: "Ethan Li", slug: "ethan-li", roles: ["Software Member"], subteams: ["software"] },
+  { name: "Brendan Desrosiers", slug: "brendan-desrosiers", roles: ["Software & Structures Member"], subteams: ["software", "structures"] },
   { name: "Kai Kaplinsky", slug: "kai-kaplinsky", roles: ["Software Member"], subteams: ["software"] },
 ];
 
 /** Tufts email addresses that don't follow first.last@tufts.edu */
 export const emailOverrides: Record<string, string> = {
   "william-goldman": "william.goldman@tufts.edu",
+  "adonis-deking": "adonis.deking@tufts.edu",
+  "ethan-li": "ethan.li@tufts.edu",
+  "brandon-douglas": "brandon.douglas@tufts.edu",
+  "jacky-zhao": "jacky.zhao@tufts.edu",
+  "molly-kreitman": "molly.kreitman@tufts.edu",
+  "allie-staiger": "allison.staiger@tufts.edu",
+  "steven-bagade": "steven.bagade@tufts.edu",
+  "evey-slavik": "evey.slavik@tufts.edu",
+  "gabriel-krauze": "gabriel.krauze@tufts.edu",
+  "jules-crowson": "jules.crowson@tufts.edu",
+  "brendan-desrosiers": "brendan.desrosiers@tufts.edu",
+  "maksim-mandel": "maksim.mandel@tufts.edu",
+  "sean-ozalpasan": "sean.ozalpasan@tufts.edu",
+  "max-chen": "maximilian.chen@tufts.edu",
 };
 
 export const alumni = [
