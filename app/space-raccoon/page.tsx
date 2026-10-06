@@ -80,7 +80,7 @@ export default function SpaceRaccoon() {
         {/* Right column - Image */}
         <div className="lg:col-span-1">
             <Image
-              src="/cubesat-remove-background.png"
+              src="/cubesat-remove-background-clear.png"
               alt="CubeSat Onshape Design"
               width={512}
               height={512}
