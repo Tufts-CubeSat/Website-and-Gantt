@@ -194,12 +194,14 @@ export const members: Member[] = [
   { name: "Allie Staiger", slug: "allie-staiger", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Isaac Meredith", slug: "isaac-meredith", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Molly Kreitman", slug: "molly-kreitman", roles: ["Structures Member"], subteams: ["structures"] },
+  { name: "Timothy Ngo", slug: "timothy-ngo", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Steven Bagade", slug: "steven-bagade", roles: ["Power Member"], subteams: ["power"] },
   { name: "Daniel Carreno", slug: "daniel-carreno", roles: ["Power Member"], subteams: ["power"] },
   { name: "Jules Crowson", slug: "jules-crowson", roles: ["Power Member"], subteams: ["power"] },
   { name: "Evey Slavik", slug: "evey-slavik", roles: ["Power Member"], subteams: ["power"] },
   { name: "Max Chen", slug: "max-chen", roles: ["Power Member"], subteams: ["power"] },
   { name: "Sean Ozalpasan", slug: "sean-ozalpasan", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Navya Agrawal", slug: "navya-agrawal", roles: ["Comms & Power Member"], subteams: ["comms", "power"] },
   { name: "Maksim Mandel", slug: "maksim-mandel", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Gabriel Krauze", slug: "gabriel-krauze", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Brandon Douglas", slug: "brandon-douglas", roles: ["Comms Member"], subteams: ["comms"] },
@@ -207,6 +209,7 @@ export const members: Member[] = [
   { name: "Ethan Li", slug: "ethan-li", roles: ["Software Member"], subteams: ["software"] },
   { name: "Brendan Desrosiers", slug: "brendan-desrosiers", roles: ["Software & Structures Member"], subteams: ["software", "structures"] },
   { name: "Kai Kaplinsky", slug: "kai-kaplinsky", roles: ["Software Member"], subteams: ["software"] },
+  { name: "Jiajun Li", slug: "jiajun-li", roles: ["Weather Balloon Member"], subteams: ["weather-balloon"] },
 ];
 
 /** Tufts email addresses that don't follow first.last@tufts.edu */
@@ -226,6 +229,9 @@ export const emailOverrides: Record<string, string> = {
   "maksim-mandel": "maksim.mandel@tufts.edu",
   "sean-ozalpasan": "sean.ozalpasan@tufts.edu",
   "max-chen": "maximilian.chen@tufts.edu",
+  "jiajun-li": "Jiajun.Li689154@tufts.edu",
+  "timothy-ngo": "timothy.ngo@tufts.edu",
+  "navya-agrawal": "navya.agrawal@tufts.edu",
 };
 
 export const alumni = [
