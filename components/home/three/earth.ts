@@ -159,10 +159,11 @@ export function latLonToLocal(lat: number, lon: number) {
   return new THREE.Vector3(Math.cos(la) * Math.cos(lo), Math.sin(la), -Math.cos(la) * Math.sin(lo));
 }
 
-export function createEarth(radius: number, sunDir: THREE.Vector3, onLoad?: () => void) {
+export function createEarth(radius: number, sunDir: THREE.Vector3, onLoad?: () => void, prepare?: (texture: THREE.Texture) => void) {
   const loader = new THREE.TextureLoader();
   let pending = 3;
-  const loaded = () => {
+  const loaded = (t: THREE.Texture) => {
+    prepare?.(t);
     pending -= 1;
     if (pending === 0) onLoad?.();
   };

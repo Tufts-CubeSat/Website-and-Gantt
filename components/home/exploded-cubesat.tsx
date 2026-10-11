@@ -292,6 +292,7 @@ export function ExplodedCubeSat() {
           scrollTrigger: {
             trigger: q(".cubesat-pin")[0],
             pin: true,
+            anticipatePin: 1,
             start: `top top+=${HEADER_OFFSET}`,
             end: "+=160%",
             scrub: 0.6,

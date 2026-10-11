@@ -129,6 +129,7 @@ export function MissionStory() {
           scrollTrigger: {
             trigger: q(".story-pin")[0],
             pin: true,
+            anticipatePin: 1,
             start: `top top+=${HEADER_OFFSET}`,
             end: () => `+=${window.innerHeight * (stages.length - 1)}`,
             scrub: 0.6,

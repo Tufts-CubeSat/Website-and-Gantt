@@ -7,7 +7,6 @@ import { ArrowDown, ArrowRight, Github, Mail, MapPin } from "lucide-react";
 import { StarfieldCanvas } from "./home/starfield-canvas";
 import { MissionStory } from "./home/mission-story";
 import { ExplodedCubeSat } from "./home/exploded-cubesat";
-import { SubteamGrid } from "./home/subteam-grid";
 import { Roadmap } from "./home/roadmap";
 import { EmployerMarquee } from "./home/employer-marquee";
 
@@ -110,7 +109,6 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
       <div className="relative z-10">
         <MissionStory />
         <ExplodedCubeSat />
-        <SubteamGrid />
         <Roadmap />
         <EmployerMarquee />
       </div>

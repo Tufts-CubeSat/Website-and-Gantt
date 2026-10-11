@@ -145,6 +145,7 @@ export function createExplodedScene(canvas: HTMLCanvasElement, specs: LayerSpec[
     pointer.ty = THREE.MathUtils.clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
   };
   window.addEventListener("pointermove", onPointer, { passive: true });
+  stage.warmUp();
 
   return {
     dispose() {

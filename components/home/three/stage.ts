@@ -13,6 +13,14 @@ export interface Stage {
   size: StageSize;
   /** Projects a world point to CSS pixels inside the canvas. */
   project: (point: THREE.Vector3, out?: { x: number; y: number }) => { x: number; y: number };
+  /**
+   * Compiles shaders (in parallel where supported) and uploads geometry with
+   * one offscreen render. Call once the scene is built so the first visible
+   * frame, which lands mid-scroll, doesn't stall the scrubbed timelines.
+   */
+  warmUp: () => void;
+  /** Decodes off the main thread, then uploads to the GPU ahead of first use. */
+  prepareTexture: (texture: THREE.Texture) => void;
   dispose: () => void;
 }
 
@@ -33,6 +41,9 @@ interface StageOptions {
  */
 export function createStage(canvas: HTMLCanvasElement, options: StageOptions): Stage {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  // The status checks block on compilation (undercutting compileAsync) and only
+  // surface driver noise in production, e.g. ANGLE's X4122 precision warnings.
+  renderer.debug.checkShaderErrors = process.env.NODE_ENV !== "production";
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -103,13 +114,30 @@ export function createStage(canvas: HTMLCanvasElement, options: StageOptions): S
     return out;
   };
 
+  let disposed = false;
+
   return {
     renderer,
     scene,
     camera,
     size,
     project,
+    warmUp() {
+      renderer.compileAsync(scene, camera).then(() => {
+        if (!disposed) renderer.render(scene, camera);
+      });
+    },
+    prepareTexture(texture) {
+      const image = texture.image as HTMLImageElement | undefined;
+      const decoded = image?.decode ? image.decode() : Promise.resolve();
+      decoded
+        .catch(() => {})
+        .then(() => {
+          if (!disposed) renderer.initTexture(texture);
+        });
+    },
     dispose() {
+      disposed = true;
       cancelAnimationFrame(frame);
       visibility.disconnect();
       resizeObserver.disconnect();
