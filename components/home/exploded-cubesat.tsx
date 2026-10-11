@@ -1,13 +1,17 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { subteams } from "@/lib/team-data";
+import { CUBESAT_LAYERS, SUBTEAM_COLORS } from "./cubesat-layers";
+import type { ExplodedState, LabelElement } from "./three/exploded-scene";
 import { gsap, HEADER_OFFSET, useGsap } from "./use-gsap";
+import { useWebGLScenes } from "./use-webgl";
 
 /**
- * "Scroll to open the CubeSat": an isometric 2U stack that separates into its
- * subsystems as you scroll. The markup is drawn in the exploded state (the
- * static / reduced-motion view); GSAP animates *from* the compact stack.
+ * "Scroll to open the CubeSat": a 2U stack that separates into its subsystems
+ * as you scroll. With WebGL it is a lit, physically based 3D model; otherwise
+ * an isometric SVG drawn in the exploded state (the static / reduced-motion
+ * view) that GSAP animates *from* the compact stack.
  */
 
 // Isometric projection: 1 unit = 1 mm, 1U = 100 mm.
@@ -65,12 +69,7 @@ function Board({ z, color }: { z: number; color: string }) {
   return <IsoBox x={4} y={4} z={z} w={92} d={92} h={3} color={`color-mix(in srgb, ${color} 35%, #0f2a1d)`} />;
 }
 
-const colorOf = (id: string) => subteams.find((s) => s.id === id)?.color ?? "#94a3b8";
-const POWER = colorOf("power");
-const SOFTWARE = colorOf("software");
-const STRUCTURES = colorOf("structures");
-const COMMS = colorOf("comms");
-const PAYLOAD = "#fb923c";
+const { power: POWER, software: SOFTWARE, structures: STRUCTURES, comms: COMMS, payload: PAYLOAD } = SUBTEAM_COLORS;
 
 interface Layer {
   name: string;
@@ -278,38 +277,53 @@ function LeaderLabel({ from, to, title, owner, color, anchor = "start" }: { from
 
 export function ExplodedCubeSat() {
   const root = useRef<HTMLElement>(null);
+  const webgl = useWebGLScenes();
+  // Mutable scene state: GSAP tweens it, the WebGL scene reads it each frame.
+  const [state] = useState<ExplodedState>(() => ({ panels: 0, front: 0, layers: CUBESAT_LAYERS.map(() => ({ t: 0 })), turn: 0 }));
 
-  useGsap(root, () => {
-    const mm = gsap.matchMedia();
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const q = gsap.utils.selector(root.current);
-      const tl = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
-        scrollTrigger: {
-          trigger: q(".cubesat-pin")[0],
-          pin: true,
-          start: `top top+=${HEADER_OFFSET}`,
-          end: "+=160%",
-          scrub: 0.6,
-        },
+  useGsap(
+    root,
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const q = gsap.utils.selector(root.current);
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.inOut" },
+          scrollTrigger: {
+            trigger: q(".cubesat-pin")[0],
+            pin: true,
+            start: `top top+=${HEADER_OFFSET}`,
+            end: "+=160%",
+            scrub: 0.6,
+          },
+        });
+
+        tl.to(q(".c-hint"), { autoAlpha: 0, duration: 0.15 }, 0.05);
+
+        if (webgl) {
+          const s = state;
+          tl.to(s, { panels: 1, duration: 0.35 }, 0)
+            .to(s, { front: 1, duration: 0.3 }, 0.05)
+            .to(s, { turn: 1, duration: 1.15, ease: "none" }, 0);
+          s.layers.forEach((layer, i) => {
+            tl.to(layer, { t: 1, duration: 0.8 }, 0.2 + i * 0.03);
+          });
+        } else {
+          tl.from(q(".c-panel-left, .c-panel-right"), { x: 0, y: 0, opacity: 1, duration: 0.35 }, 0).from(
+            q(".c-front"),
+            { opacity: 1, duration: 0.3 },
+            0.05
+          );
+          q(".c-layer").forEach((layer, i) => {
+            tl.from(layer, { y: Number(layer.getAttribute("data-dy")), duration: 0.8 }, 0.2 + i * 0.03);
+          });
+        }
+
+        tl.from(q(".c-label"), { autoAlpha: 0, x: -12, stagger: 0.05, duration: 0.25 }, 0.75);
       });
-
-      tl.to(q(".c-hint"), { autoAlpha: 0, duration: 0.15 }, 0.05)
-        .from(q(".c-panel-left, .c-panel-right"), { x: 0, y: 0, opacity: 1, duration: 0.35 }, 0)
-        .from(q(".c-front"), { opacity: 1, duration: 0.3 }, 0.05);
-
-      q(".c-layer").forEach((layer, i) => {
-        tl.from(layer, { y: Number(layer.getAttribute("data-dy")), duration: 0.8 }, 0.2 + i * 0.03);
-      });
-
-      tl.from(q(".c-label"), { autoAlpha: 0, x: -12, stagger: 0.05, duration: 0.25 }, 0.75);
-    });
-  });
-
-  const rightCorner = (z: number) => iso([U, 0, z]);
-  const labelX = 600;
-  const chassisAnchor = iso([0, 0, HEIGHT_2U]);
-  const panelAnchor = iso([50, U, 150]);
+    },
+    [webgl]
+  );
 
   return (
     <section ref={root} className="relative border-t border-[var(--home-border)]" aria-labelledby="cubesat-heading">
@@ -338,65 +352,148 @@ export function ExplodedCubeSat() {
           </p>
         </div>
 
-        <svg
-          viewBox="0 0 900 800"
-          className="mx-auto h-auto max-h-[calc(100vh-8rem)] w-full overflow-visible"
-          role="img"
-          aria-label="Exploded view of the SPACE RACCOON 2U CubeSat, bottom to top: antenna deck, transceiver, power system, ADCS reaction wheels, flight computer, and GoPro payload, inside an aluminum chassis with solar panels"
-        >
-          <g className="c-rail-back">
-            <Rail x={0} y={0} />
-          </g>
-
-          {layers.map((layer, slot) => {
-            const explodedZ = EXPLODED_Z[slot];
-            const dy = (explodedZ - COMPACT_Z[slot]) * S;
-            const corner = rightCorner(explodedZ + 3);
-            return (
-              <g key={layer.name} className="c-layer" data-dy={dy}>
-                {layer.render(explodedZ)}
-                <LeaderLabel
-                  from={{ x: corner.x + 4, y: corner.y }}
-                  to={{ x: labelX, y: corner.y }}
-                  title={layer.name}
-                  owner={layer.owner}
-                  color={layer.color}
-                />
-              </g>
-            );
-          })}
-
-          <g className="c-front" style={{ opacity: 0.3 }}>
-            <Rail x={0} y={U - 8} />
-            <Rail x={U - 8} y={0} />
-            <Rail x={U - 8} y={U - 8} />
-          </g>
-
-          <g className="c-panel-left" style={{ opacity: 0.35 }} transform={`translate(${leftOut.x} ${leftOut.y})`}>
-            <SolarCells face="left" />
-          </g>
-          <g className="c-panel-right" style={{ opacity: 0.35 }} transform={`translate(${rightOut.x} ${rightOut.y})`}>
-            <SolarCells face="right" />
-          </g>
-
-          <LeaderLabel
-            from={chassisAnchor}
-            to={{ x: 190, y: chassisAnchor.y - 60 }}
-            title="2U aluminum chassis"
-            owner="Structures"
-            color={STRUCTURES}
-            anchor="end"
-          />
-          <LeaderLabel
-            from={{ x: panelAnchor.x + leftOut.x, y: panelAnchor.y + leftOut.y }}
-            to={{ x: 150, y: panelAnchor.y + leftOut.y + 90 }}
-            title="Solar panels"
-            owner="Power"
-            color={POWER}
-            anchor="end"
-          />
-        </svg>
+        {webgl ? <CubeSatModel3D state={state} /> : <CubeSatIllustration />}
       </div>
     </section>
+  );
+}
+
+const MODEL_LABEL =
+  "3D model of the SPACE RACCOON 2U CubeSat separating into its stack, bottom to top: antenna deck, transceiver, power system, ADCS reaction wheels, flight computer, and GoPro payload, inside an aluminum chassis with solar panels";
+
+/** WebGL view: a canvas plus HTML leader labels that the scene keeps pinned to the model. */
+function CubeSatModel3D({ state }: { state: ExplodedState }) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let disposed = false;
+    let scene: { dispose: () => void } | undefined;
+    import("./three/exploded-scene").then(({ createExplodedScene }) => {
+      const stage = stageRef.current;
+      const canvas = canvasRef.current;
+      if (disposed || !stage || !canvas) return;
+      const find = (key: string): LabelElement => {
+        const el = stage.querySelector<HTMLElement>(`[data-label="${key}"]`)!;
+        return { root: el, line: el.querySelector("line")!, dot: el.querySelector("circle")!, text: el.querySelector<HTMLElement>("[data-text]")! };
+      };
+      scene = createExplodedScene(canvas, CUBESAT_LAYERS, state, {
+        layers: CUBESAT_LAYERS.map((_, i) => find(`layer-${i}`)),
+        chassis: find("chassis"),
+        panel: find("panel"),
+      });
+      setReady(true);
+    });
+    return () => {
+      disposed = true;
+      scene?.dispose();
+    };
+  }, [state]);
+
+  return (
+    <div ref={stageRef} className="relative mx-auto h-[min(52vh,740px)] min-h-[340px] w-full md:h-[min(76vh,740px)] md:min-h-[420px]" role="img" aria-label={MODEL_LABEL}>
+      <canvas ref={canvasRef} className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`} />
+      {CUBESAT_LAYERS.map((layer, i) => (
+        <SceneLabel key={layer.name} id={`layer-${i}`} title={layer.name} owner={layer.owner} color={layer.color} side="right" />
+      ))}
+      <SceneLabel id="chassis" title="2U aluminum chassis" owner="Structures" color={STRUCTURES} side="left" />
+      <SceneLabel id="panel" title="Solar panels" owner="Power" color={POWER} side="left" />
+    </div>
+  );
+}
+
+function SceneLabel({ id, title, owner, color, side }: { id: string; title: string; owner: string; color: string; side: "left" | "right" }) {
+  return (
+    <div
+      data-label={id}
+      // Phones only have room for the stack labels on the right.
+      className={`c-label pointer-events-none absolute inset-0 ${side === "left" ? "max-sm:hidden" : ""}`}
+      aria-hidden
+    >
+      <svg className="absolute inset-0 h-full w-full overflow-visible">
+        <line style={{ stroke: "var(--home-muted)" }} strokeWidth={1} strokeDasharray="3 3" />
+        <circle r={3} style={{ fill: color }} />
+      </svg>
+      <div data-text className={`absolute left-0 top-0 max-w-[40%] sm:max-w-none sm:whitespace-nowrap ${side === "left" ? "text-right" : ""}`}>
+        <p className="text-[11px] font-semibold leading-tight text-[var(--home-text)] sm:text-[13px] md:text-[15px]">{title}</p>
+        <p
+          className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] sm:text-[10px] md:text-[11px]"
+          // Pull pale subteam colors toward the text color so they stay legible in light mode.
+          style={{ color: `color-mix(in srgb, ${color} 72%, var(--home-text))` }}
+        >
+          {owner}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** SVG fallback: no WebGL, reduced motion, and the server render. */
+function CubeSatIllustration() {
+  const rightCorner = (z: number) => iso([U, 0, z]);
+  const labelX = 600;
+  const chassisAnchor = iso([0, 0, HEIGHT_2U]);
+  const panelAnchor = iso([50, U, 150]);
+
+  return (
+    <svg
+      viewBox="0 0 900 800"
+      className="mx-auto h-auto max-h-[calc(100vh-8rem)] w-full overflow-visible"
+      role="img"
+      aria-label="Exploded view of the SPACE RACCOON 2U CubeSat, bottom to top: antenna deck, transceiver, power system, ADCS reaction wheels, flight computer, and GoPro payload, inside an aluminum chassis with solar panels"
+    >
+      <g className="c-rail-back">
+        <Rail x={0} y={0} />
+      </g>
+
+      {layers.map((layer, slot) => {
+        const explodedZ = EXPLODED_Z[slot];
+        const dy = (explodedZ - COMPACT_Z[slot]) * S;
+        const corner = rightCorner(explodedZ + 3);
+        return (
+          <g key={layer.name} className="c-layer" data-dy={dy}>
+            {layer.render(explodedZ)}
+            <LeaderLabel
+              from={{ x: corner.x + 4, y: corner.y }}
+              to={{ x: labelX, y: corner.y }}
+              title={layer.name}
+              owner={layer.owner}
+              color={layer.color}
+            />
+          </g>
+        );
+      })}
+
+      <g className="c-front" style={{ opacity: 0.3 }}>
+        <Rail x={0} y={U - 8} />
+        <Rail x={U - 8} y={0} />
+        <Rail x={U - 8} y={U - 8} />
+      </g>
+
+      <g className="c-panel-left" style={{ opacity: 0.35 }} transform={`translate(${leftOut.x} ${leftOut.y})`}>
+        <SolarCells face="left" />
+      </g>
+      <g className="c-panel-right" style={{ opacity: 0.35 }} transform={`translate(${rightOut.x} ${rightOut.y})`}>
+        <SolarCells face="right" />
+      </g>
+
+      <LeaderLabel
+        from={chassisAnchor}
+        to={{ x: 190, y: chassisAnchor.y - 60 }}
+        title="2U aluminum chassis"
+        owner="Structures"
+        color={STRUCTURES}
+        anchor="end"
+      />
+      <LeaderLabel
+        from={{ x: panelAnchor.x + leftOut.x, y: panelAnchor.y + leftOut.y }}
+        to={{ x: 150, y: panelAnchor.y + leftOut.y + 90 }}
+        title="Solar panels"
+        owner="Power"
+        color={POWER}
+        anchor="end"
+      />
+    </svg>
   );
 }

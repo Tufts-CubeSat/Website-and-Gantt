@@ -363,6 +363,23 @@ body {
   border-radius: 0.5rem;
 }
 
+/* WebGL mission scene: the canvas bleeds past its grid cell so Earth's limb
+   isn't cut off, and fades out toward the text column and the top edge. */
+.mission-3d-bleed {
+  inset: -6% -8% -8% -8%;
+  --mission-fade: linear-gradient(to right, transparent, #000 10%), linear-gradient(to bottom, transparent, #000 10%, #000 84%, transparent);
+  -webkit-mask-image: var(--mission-fade);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--mission-fade);
+  mask-composite: intersect;
+}
+
+@media (min-width: 768px) {
+  .mission-3d-bleed {
+    inset: -14% -24% -16% -16%;
+  }
+}
+
 .story[data-animated="true"] .story-panels {
   min-height: 17rem;
 }
