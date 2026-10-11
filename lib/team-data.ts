@@ -215,6 +215,7 @@ export const members: Member[] = [
 /** Tufts email addresses that don't follow first.last@tufts.edu */
 export const emailOverrides: Record<string, string> = {
   "william-goldman": "william.goldman@tufts.edu",
+  "natalie-germanov": "natalie.germanov@tufts.edu",
   "adonis-deking": "adonis.deking@tufts.edu",
   "ethan-li": "ethan.li@tufts.edu",
   "brandon-douglas": "brandon.douglas@tufts.edu",

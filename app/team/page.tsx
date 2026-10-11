@@ -38,9 +38,22 @@ function websiteLabel(url: string): { label: string; isGithub: boolean } {
 function MemberCard({ member, size = "md" }: { member: Member; size?: "md" | "lg" }) {
   const color = getSubteam(member.subteams[0]).color;
   const email = getMemberEmail(member);
+  // Subteam leads get a border in their subteam's color to stand out.
+  const isSubteamLead = member.lead === "subteam";
 
   return (
-    <div className="home-panel-surface flex h-full items-center gap-4 p-3 pr-4">
+    <div
+      className="home-panel-surface flex h-full items-center gap-4 p-3 pr-4"
+      style={
+        isSubteamLead
+          ? {
+              borderWidth: 2,
+              borderColor: color,
+              boxShadow: `0 0 14px color-mix(in srgb, ${color} 35%, transparent)`,
+            }
+          : undefined
+      }
+    >
       <MemberAvatar name={member.name} photo={getMemberPhoto(member.slug)} color={color} size={size} />
       <div className="min-w-0">
         <p className={`font-semibold text-[var(--home-text)] ${size === "lg" ? "text-xl" : ""}`}>{member.name}</p>
@@ -99,7 +112,8 @@ export default function Team() {
   const projectLeads = members.filter((m) => m.lead === "project");
   const teamsWithMembers = subteams.map((subteam) => ({
     subteam,
-    people: members.filter((m) => m.lead !== "project" && m.subteams.includes(subteam.id)),
+    // Members on multiple subteams appear only under their first (primary) one.
+    people: members.filter((m) => m.lead !== "project" && m.subteams[0] === subteam.id),
   }));
 
   return (
