@@ -45,7 +45,7 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
             Tufts CubeSat Team
           </p>
           <h1 className="mb-4 max-w-lg text-xl font-medium leading-snug text-[var(--home-fog)] sm:text-2xl">
-            Building Tufts&apos;s first satellite to see space debris before it becomes a threat.
+            Building Tufts&apos; first satellite to see space debris before it becomes a threat.
           </h1>
           <p className="mb-8 max-w-md text-sm leading-relaxed text-[var(--home-muted)] sm:text-base">
             SPACE RACCOON is a 2U CubeSat mission using onboard computer vision

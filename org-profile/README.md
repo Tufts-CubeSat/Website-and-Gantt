@@ -5,7 +5,7 @@
 <h1 align="center">Tufts CubeSat</h1>
 
 <p align="center">
-  Students at Tufts University building <b>SPACE RACCOON</b>, Tufts's first satellite.<br/>
+  Students at Tufts University building <b>SPACE RACCOON</b>, Tufts' first satellite.<br/>
   <a href="https://tufts-cubesat.vercel.app/">Website</a> ·
   <a href="https://tufts-cubesat.vercel.app/space-raccoon">Mission</a> ·
   <a href="https://tufts-cubesat.vercel.app/subteams">Subteams</a> ·
@@ -47,7 +47,7 @@ We build with commercial off-the-shelf parts wherever possible, and we collabora
 - [Outreach_Materials](https://github.com/Tufts-CubeSat/Outreach_Materials): workshops, slides, and design review materials from our outreach, including our Medford High School workshops.
 
 **Past projects**
-- [Tufts-SAC2024-CubeSAT](https://github.com/Tufts-CubeSat/Tufts-SAC2024-CubeSAT): payload sensor code for Tufts's Spaceport America Cup 2024 entry.
+- [Tufts-SAC2024-CubeSAT](https://github.com/Tufts-CubeSat/Tufts-SAC2024-CubeSAT): payload sensor code for Tufts' Spaceport America Cup 2024 entry.
 
 ## 🧑‍🚀 Subteams
 
