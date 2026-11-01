@@ -22,6 +22,7 @@ const navItems = [
     ]
   },
   { name: "Resources", href: "/resources" },
+  { name: "Sponsors", href: "/sponsors" },
 ];
 
 export function Navigation() {

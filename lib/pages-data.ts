@@ -93,6 +93,15 @@ export const pagesData: Record<string, PageMetadata> = {
     category: "Resources",
     priority: 7,
   }),
+  sponsors: createPageMetadata({
+    id: "sponsors",
+    title: "Sponsors",
+    href: "/sponsors",
+    description: "Support the Tufts CubeSat Team: our current sponsors, the 2026–27 sponsorship packet, and how to donate by check or online.",
+    keywords: ["sponsors", "sponsorship", "donate", "donation", "give", "funding", "support", "packet", "partners"],
+    category: "Support",
+    priority: 7,
+  }),
 };
 
 /**
