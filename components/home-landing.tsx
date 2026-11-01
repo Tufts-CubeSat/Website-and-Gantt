@@ -35,13 +35,13 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
       />
 
       {/* Hero */}
-      <section className="relative mx-auto grid min-h-[calc(100vh-4rem)] content-center max-w-7xl items-center gap-10 px-6 py-12 md:grid-cols-[1.05fr_0.95fr] md:gap-6 md:px-10 lg:px-14">
+      <section className="relative mx-auto grid min-h-[calc(100vh-4rem)] content-center max-w-7xl items-center gap-10 px-6 py-12 md:pb-28 md:grid-cols-[1.05fr_0.95fr] md:gap-6 md:px-10 lg:px-14">
         <div
           className={`relative z-10 max-w-xl transition-all duration-1000 ease-out ${
             ready ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
           }`}
         >
-          <p className="mb-5 font-[family-name:var(--font-home-display)] text-4xl font-bold tracking-tight text-[var(--home-text)] sm:text-5xl md:text-6xl">
+          <p className="mb-5 text-4xl font-bold tracking-tight text-[var(--home-text)] sm:text-5xl md:text-6xl">
             Tufts CubeSat Team
           </p>
           <h1 className="mb-4 max-w-lg text-xl font-medium leading-snug text-[var(--home-fog)] sm:text-2xl">
@@ -71,7 +71,7 @@ export function HomeLanding({ lastUpdated }: { lastUpdated: string }) {
             {missionStats.map((stat) => (
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="font-[family-name:var(--font-home-display)] text-xl font-bold text-[var(--home-text)] sm:text-2xl">
+                <dd className="text-xl font-bold text-[var(--home-text)] sm:text-2xl">
                   {stat.value}
                 </dd>
                 <dd className="mt-1 text-[11px] leading-tight text-[var(--home-muted)]">{stat.label}</dd>

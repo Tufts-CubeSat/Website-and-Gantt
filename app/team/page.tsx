@@ -11,7 +11,6 @@ import {
   allTeamMeeting,
   alumni,
   getMemberEmail,
-  getSubteam,
   members,
   specialThanks,
   subteams,
@@ -36,25 +35,11 @@ function websiteLabel(url: string): { label: string; isGithub: boolean } {
 }
 
 function MemberCard({ member, size = "md" }: { member: Member; size?: "md" | "lg" }) {
-  const color = getSubteam(member.subteams[0]).color;
   const email = getMemberEmail(member);
-  // Subteam leads get a border in their subteam's color to stand out.
-  const isSubteamLead = member.lead === "subteam";
 
   return (
-    <div
-      className="home-panel-surface flex h-full items-center gap-4 p-3 pr-4"
-      style={
-        isSubteamLead
-          ? {
-              borderWidth: 2,
-              borderColor: color,
-              boxShadow: `0 0 14px color-mix(in srgb, ${color} 35%, transparent)`,
-            }
-          : undefined
-      }
-    >
-      <MemberAvatar name={member.name} photo={getMemberPhoto(member.slug)} color={color} size={size} />
+    <div className="home-panel-surface flex h-full items-center gap-4 p-3 pr-4">
+      <MemberAvatar name={member.name} photo={getMemberPhoto(member.slug)} size={size} />
       <div className="min-w-0">
         <p className={`font-semibold text-[var(--home-text)] ${size === "lg" ? "text-xl" : ""}`}>{member.name}</p>
         {member.roles.map((role) => (
@@ -120,7 +105,7 @@ export default function Team() {
     <main className="home-landing min-h-screen bg-[var(--home-ink)] px-6 py-10 text-[var(--home-fog)] md:px-10 lg:px-14">
       <div className="mx-auto max-w-6xl">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Fall 2026</p>
-        <h1 className="mb-6 font-[family-name:var(--font-home-display)] text-4xl font-bold tracking-tight text-[var(--home-text)]">
+        <h1 className="mb-6 text-4xl font-bold tracking-tight text-[var(--home-text)]">
           {pageMetadata.title}
         </h1>
 
@@ -132,7 +117,7 @@ export default function Team() {
         />
 
         <section className="mb-14">
-          <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Project Leads</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-[var(--home-text)]">Project Leads</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {projectLeads.map((member, i) => (
               <Reveal key={member.slug} delay={i * 100}>
@@ -146,11 +131,10 @@ export default function Team() {
           {teamsWithMembers.map(({ subteam, people }) => (
             <div key={subteam.id} id={subteam.id} className="scroll-mt-24">
               <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--home-border)] pb-2">
-                <h2 className="flex items-center gap-3 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">
-                  <span className="h-3 w-3 rounded-full" style={{ background: subteam.color }} aria-hidden />
+                <h2 className="flex items-center gap-3 text-2xl font-semibold text-[var(--home-text)]">
                   {subteam.name}
                   {subteam.isNew && (
-                    <span className="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--home-bg)]" style={{ background: subteam.color }}>
+                    <span className="border border-[var(--home-border)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--home-muted)]">
                       New
                     </span>
                   )}
@@ -180,7 +164,7 @@ export default function Team() {
 
         <div className="grid gap-10 md:grid-cols-2">
           <section>
-            <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Special Thanks</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-[var(--home-text)]">Special Thanks</h2>
             <ul className="grid gap-2 sm:grid-cols-2">
               {specialThanks.map((name) => (
                 <li key={name} className="home-panel-surface p-3 text-sm text-[var(--home-text)]">
@@ -190,7 +174,7 @@ export default function Team() {
             </ul>
           </section>
           <section>
-            <h2 className="mb-4 font-[family-name:var(--font-home-display)] text-2xl font-semibold text-[var(--home-text)]">Alumni</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-[var(--home-text)]">Alumni</h2>
             <ul className="grid gap-2 sm:grid-cols-2">
               {alumni.map((name) => (
                 <li key={name} className="home-panel-surface p-3 text-sm text-[var(--home-text)]">

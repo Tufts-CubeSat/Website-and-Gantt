@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
-
-const syne = Syne({
-  variable: "--font-home-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-home-body",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -102,7 +90,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${syne.variable} ${dmSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <Navigation />
         <div className="md:ml-64 pt-16">{children}</div>

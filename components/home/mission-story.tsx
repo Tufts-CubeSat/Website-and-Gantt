@@ -19,43 +19,36 @@ const stages = [
     title: "Launch",
     kicker: "Target 2029",
     body: "After two to three years of design and testing on campus, SPACE RACCOON rides to orbit as a compact 2U CubeSat: the first satellite ever built at Tufts.",
-    tech: ["2U CubeSat", "COTS components", "Systems engineering"],
   },
   {
     title: "Reach orbit",
     kicker: "Low Earth Orbit · 14 months",
     body: "Deployed into Low Earth Orbit for a 14-month mission, the satellite runs on body-mounted solar cells and holds its attitude with in-house reaction wheels.",
-    tech: ["Electrical power system", "ADCS", "Reaction wheels"],
   },
   {
     title: "Detect",
     kicker: "Vision payload",
     body: "During scheduled imaging windows a modified GoPro captures a frame every 30 seconds, searching for debris against the star field.",
-    tech: ["GoPro payload", "Imaging windows", "Onshape CAD"],
   },
   {
     title: "Classify",
     kicker: "Onboard computer vision",
     body: "Image processing isolates each object and a neural network classifies it (fragment, rocket body, defunct satellite) right on the spacecraft.",
-    tech: ["Python → C image processing", "Neural network", "FPGA", "Flight software"],
   },
   {
     title: "Assess the risk",
     kicker: "Collision screening",
     body: "Tracks across frames feed a collision-risk assessment that flags the objects that matter most to anything else flying in LEO.",
-    tech: ["Orbital mechanics", "Linear algebra", "Risk scoring"],
   },
   {
     title: "Downlink",
     kicker: "VHF / UHF",
     body: "Only frames that contain debris are compressed, packetized, and sent over our radio link to a student-built ground station.",
-    tech: ["Transceiver & antenna", "Link budget", "Ground station", "Packetization"],
   },
   {
     title: "Open to everyone",
     kicker: "Open source",
     body: "Flight software and debris data are released openly to support safer orbital operations and the student teams that come after us.",
-    tech: ["Open-source software", "Open data", "GitHub"],
   },
 ];
 
@@ -172,9 +165,12 @@ export function MissionStory() {
           <div className="s-progress absolute left-1/2 top-0 h-full w-px origin-top -translate-x-1/2 scale-y-0 bg-[var(--home-signal)]" />
           <ol className="relative flex h-full flex-col justify-between">
             {stages.map((stage, i) => (
-              <li key={stage.title} className="story-dot flex justify-center">
-                <span className="grid h-7 w-7 place-items-center rounded-full border border-[var(--home-signal)] bg-[var(--home-bg)] text-[10px] font-semibold text-[var(--home-signal)]">
-                  {String(i + 1).padStart(2, "0")}
+              <li key={stage.title} className="flex justify-center">
+                {/* Opaque backing so the rail never shows through a dimmed dot. */}
+                <span className="rounded-full bg-[var(--home-bg)]">
+                  <span className="story-dot grid h-7 w-7 place-items-center rounded-full border border-[var(--home-signal)] bg-[var(--home-bg)] text-[10px] font-semibold text-[var(--home-signal)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </span>
               </li>
             ))}
@@ -186,7 +182,7 @@ export function MissionStory() {
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">The mission</p>
           <h2
             id="story-heading"
-            className="mb-6 font-[family-name:var(--font-home-display)] text-2xl font-semibold tracking-tight text-[var(--home-text)] md:text-3xl"
+            className="mb-6 text-2xl font-semibold tracking-tight text-[var(--home-text)] md:text-3xl"
           >
             From launch pad to open data.
           </h2>
@@ -196,17 +192,10 @@ export function MissionStory() {
                 <p className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--home-muted)]">
                   {String(i + 1).padStart(2, "0")} / {String(stages.length).padStart(2, "0")} · {stage.kicker}
                 </p>
-                <h3 className="mb-3 font-[family-name:var(--font-home-display)] text-3xl font-bold tracking-tight text-[var(--home-text)] md:text-4xl">
+                <h3 className="mb-3 text-3xl font-bold tracking-tight text-[var(--home-text)] md:text-4xl">
                   {stage.title}
                 </h3>
-                <p className="mb-5 max-w-md text-sm leading-relaxed text-[var(--home-muted)] md:text-base">{stage.body}</p>
-                <ul className="flex flex-wrap gap-2">
-                  {stage.tech.map((tech) => (
-                    <li key={tech} className="story-chip px-2.5 py-1 text-xs font-medium text-[var(--home-text)]">
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
+                <p className="max-w-md text-sm leading-relaxed text-[var(--home-muted)] md:text-base">{stage.body}</p>
               </article>
             ))}
           </div>

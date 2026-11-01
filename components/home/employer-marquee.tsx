@@ -8,7 +8,7 @@ export function EmployerMarquee() {
     <section className="relative overflow-hidden border-t border-[var(--home-border)] py-16" aria-labelledby="employers-heading">
       <div className="mx-auto mb-8 max-w-7xl px-6 md:px-10 lg:px-14">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Where we and our alumni work</p>
-        <h2 id="employers-heading" className="max-w-2xl font-[family-name:var(--font-home-display)] text-2xl font-semibold tracking-tight text-[var(--home-text)] md:text-3xl">
+        <h2 id="employers-heading" className="max-w-2xl text-2xl font-semibold tracking-tight text-[var(--home-text)] md:text-3xl">
           Skills from CubeSat carry into industry. We also collaborate with {collaborators.join(" and ")}.
         </h2>
       </div>
@@ -18,7 +18,7 @@ export function EmployerMarquee() {
             <li
               key={`${name}-${i}`}
               aria-hidden={i >= employers.length}
-              className="whitespace-nowrap font-[family-name:var(--font-home-display)] text-3xl font-bold tracking-tight text-[var(--home-muted)] opacity-70 md:text-4xl"
+              className="whitespace-nowrap text-3xl font-bold tracking-tight text-[var(--home-muted)] opacity-70 md:text-4xl"
             >
               {name}
             </li>

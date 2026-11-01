@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { subteams } from "@/lib/team-data";
-import { CUBESAT_LAYERS, SUBTEAM_COLORS } from "./cubesat-layers";
+import { CUBESAT_LAYERS } from "./cubesat-layers";
 import type { ExplodedState, LabelElement } from "./three/exploded-scene";
 import { gsap, HEADER_OFFSET, useGsap } from "./use-gsap";
 import { useWebGLScenes } from "./use-webgl";
@@ -65,16 +64,15 @@ function IsoCylinder({ cx, cy, z, r, h, color, children }: { cx: number; cy: num
   );
 }
 
-function Board({ z, color }: { z: number; color: string }) {
-  return <IsoBox x={4} y={4} z={z} w={92} d={92} h={3} color={`color-mix(in srgb, ${color} 35%, #0f2a1d)`} />;
+function Board({ z }: { z: number }) {
+  return <IsoBox x={4} y={4} z={z} w={92} d={92} h={3} color="color-mix(in srgb, #16a34a 35%, #0f2a1d)" />;
 }
 
-const { power: POWER, software: SOFTWARE, structures: STRUCTURES, comms: COMMS, payload: PAYLOAD } = SUBTEAM_COLORS;
+/** Neutral accent for chips and fittings in the SVG fallback. */
+const ACCENT = "#94a3b8";
 
 interface Layer {
   name: string;
-  owner: string;
-  color: string;
   /** Board plus tallest component, in mm. Drives the packing of the compact stack. */
   height: number;
   render: (z: number) => ReactNode;
@@ -84,8 +82,6 @@ interface Layer {
 const layers: Layer[] = [
   {
     name: "Antenna deck",
-    owner: "Comms",
-    color: COMMS,
     height: 7,
     render: (z) => {
       const t = z + 3;
@@ -97,8 +93,8 @@ const layers: Layer[] = [
       ];
       return (
         <>
-          <Board z={z} color={COMMS} />
-          <IsoBox x={36} y={36} z={t} w={28} d={28} h={4} color={COMMS} />
+          <Board z={z} />
+          <IsoBox x={36} y={36} z={t} w={28} d={28} h={4} color={ACCENT} />
           {tapes.map(([a, b], i) => {
             const pa = iso(a);
             const pb = iso(b);
@@ -110,12 +106,10 @@ const layers: Layer[] = [
   },
   {
     name: "VHF/UHF transceiver",
-    owner: "Comms",
-    color: COMMS,
     height: 13,
     render: (z) => (
       <>
-        <Board z={z} color={COMMS} />
+        <Board z={z} />
         <IsoBox x={18} y={18} z={z + 3} w={56} d={36} h={9} color="#475569" />
         <IsoCylinder cx={80} cy={78} z={z + 3} r={5} h={10} color="#cbd5e1" />
       </>
@@ -123,12 +117,10 @@ const layers: Layer[] = [
   },
   {
     name: "Power system & battery",
-    owner: "Power",
-    color: POWER,
     height: 25,
     render: (z) => (
       <>
-        <Board z={z} color={POWER} />
+        <Board z={z} />
         <IsoBox x={58} y={12} z={z + 3} w={24} d={18} h={5} color="#334155" />
         <IsoCylinder cx={30} cy={62} z={z + 3} r={13} h={22} color="#64748b" />
         <IsoCylinder cx={62} cy={66} z={z + 3} r={13} h={22} color="#64748b" />
@@ -137,49 +129,43 @@ const layers: Layer[] = [
   },
   {
     name: "ADCS · reaction wheels",
-    owner: "Software · Structures",
-    color: STRUCTURES,
     height: 14,
     render: (z) => (
       <>
-        <Board z={z} color={STRUCTURES} />
+        <Board z={z} />
         {[
           [30, 30],
           [70, 34],
           [48, 70],
         ].map(([cx, cy]) => (
-          <IsoCylinder key={`${cx}-${cy}`} cx={cx} cy={cy} z={z + 3} r={14} h={11} color={STRUCTURES} />
+          <IsoCylinder key={`${cx}-${cy}`} cx={cx} cy={cy} z={z + 3} r={14} h={11} color={ACCENT} />
         ))}
       </>
     ),
   },
   {
     name: "Flight computer & FPGA",
-    owner: "Software",
-    color: SOFTWARE,
     height: 8,
     render: (z) => (
       <>
-        <Board z={z} color={SOFTWARE} />
+        <Board z={z} />
         <IsoBox x={14} y={14} z={z + 3} w={32} d={32} h={5} color="#1e293b" />
         <IsoBox x={58} y={16} z={z + 3} w={26} d={16} h={4} color="#334155" />
-        <IsoBox x={56} y={56} z={z + 3} w={28} d={28} h={4} color={SOFTWARE} />
+        <IsoBox x={56} y={56} z={z + 3} w={28} d={28} h={4} color={ACCENT} />
         <IsoBox x={16} y={62} z={z + 3} w={26} d={20} h={3} color="#334155" />
       </>
     ),
   },
   {
     name: "GoPro vision payload",
-    owner: "Payload · Software",
-    color: PAYLOAD,
     height: 35,
     render: (z) => {
       const lens = iso([50, 46, z + 35]);
       return (
         <>
-          <Board z={z} color={PAYLOAD} />
+          <Board z={z} />
           <IsoBox x={24} y={24} z={z + 3} w={52} d={44} h={32} color="#1f2937" />
-          <ellipse cx={lens.x} cy={lens.y} rx={14 * S * Math.SQRT2 * COS} ry={14 * S * Math.SQRT2 * SIN} style={{ fill: "#0b1220", stroke: PAYLOAD }} strokeWidth={1.2} />
+          <ellipse cx={lens.x} cy={lens.y} rx={14 * S * Math.SQRT2 * COS} ry={14 * S * Math.SQRT2 * SIN} style={{ fill: "#0b1220", stroke: ACCENT }} strokeWidth={1.2} />
           <ellipse cx={lens.x} cy={lens.y} rx={7 * S * Math.SQRT2 * COS} ry={7 * S * Math.SQRT2 * SIN} style={{ fill: "#38bdf8" }} opacity={0.8} />
         </>
       );
@@ -249,27 +235,14 @@ function SolarCells({ face }: { face: "left" | "right" }) {
   );
 }
 
-function LeaderLabel({ from, to, title, owner, color, anchor = "start" }: { from: { x: number; y: number }; to: { x: number; y: number }; title: string; owner: string; color: string; anchor?: "start" | "end" }) {
+function LeaderLabel({ from, to, title, anchor = "start" }: { from: { x: number; y: number }; to: { x: number; y: number }; title: string; anchor?: "start" | "end" }) {
   const tx = anchor === "start" ? to.x + 8 : to.x - 8;
   return (
     <g className="c-label">
       <polyline points={`${from.x},${from.y} ${to.x},${to.y}`} fill="none" style={{ stroke: "var(--home-muted)" }} strokeWidth={1} strokeDasharray="3 3" />
-      <circle cx={from.x} cy={from.y} r={2.5} style={{ fill: color }} />
-      <text className="c-label-title" x={tx} y={to.y - 2} textAnchor={anchor} fontSize={15} fontWeight={600} style={{ fill: "var(--home-text)" }}>
+      <circle cx={from.x} cy={from.y} r={2.5} style={{ fill: "var(--home-muted)" }} />
+      <text className="c-label-title" x={tx} y={to.y + 5} textAnchor={anchor} fontSize={15} fontWeight={600} style={{ fill: "var(--home-text)" }}>
         {title}
-      </text>
-      <text
-        className="c-label-owner"
-        x={tx}
-        y={to.y + 15}
-        textAnchor={anchor}
-        fontSize={11}
-        fontWeight={600}
-        letterSpacing={1.2}
-        // Pull pale subteam colors toward the text color so they stay legible in light mode.
-        style={{ fill: `color-mix(in srgb, ${color} 72%, var(--home-text))` }}
-      >
-        {owner.toUpperCase()}
       </text>
     </g>
   );
@@ -331,23 +304,13 @@ export function ExplodedCubeSat() {
       <div className="cubesat-pin relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-8 px-6 py-12 md:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] md:px-10 lg:px-14">
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Inside SPACE RACCOON</p>
-          <h2 id="cubesat-heading" className="mb-4 font-[family-name:var(--font-home-display)] text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
+          <h2 id="cubesat-heading" className="mb-4 text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
             Every layer, built by students.
           </h2>
           <p className="mb-6 max-w-md text-sm leading-relaxed text-[var(--home-muted)] md:text-base">
-            A 2U CubeSat is just 10 × 10 × 22.7 cm. Inside that volume each subteam owns a slice of the stack: the chassis
-            and orbit analysis, power, flight software and vision, and the radio link home.
+            A 2U CubeSat is just 10 × 10 × 22.7 cm. Inside that volume sits everything the mission needs: structure, power,
+            flight software and vision, and the radio link home.
           </p>
-          <ul className="grid max-w-sm grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            {subteams
-              .filter((s) => s.id !== "weather-balloon")
-              .map((s) => (
-                <li key={s.id} className="flex items-center gap-2 text-[var(--home-text)]">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: s.color }} aria-hidden />
-                  {s.name}
-                </li>
-              ))}
-          </ul>
           <p className="c-hint mt-8 hidden text-xs uppercase tracking-[0.2em] text-[var(--home-muted)] motion-safe:block">
             Scroll to open the spacecraft ↓
           </p>
@@ -396,15 +359,15 @@ function CubeSatModel3D({ state }: { state: ExplodedState }) {
     <div ref={stageRef} className="relative mx-auto h-[min(52vh,740px)] min-h-[340px] w-full md:h-[min(76vh,740px)] md:min-h-[420px]" role="img" aria-label={MODEL_LABEL}>
       <canvas ref={canvasRef} className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`} />
       {CUBESAT_LAYERS.map((layer, i) => (
-        <SceneLabel key={layer.name} id={`layer-${i}`} title={layer.name} owner={layer.owner} color={layer.color} side="right" />
+        <SceneLabel key={layer.name} id={`layer-${i}`} title={layer.name} side="right" />
       ))}
-      <SceneLabel id="chassis" title="2U aluminum chassis" owner="Structures" color={STRUCTURES} side="left" />
-      <SceneLabel id="panel" title="Solar panels" owner="Power" color={POWER} side="left" />
+      <SceneLabel id="chassis" title="2U aluminum chassis" side="left" />
+      <SceneLabel id="panel" title="Solar panels" side="left" />
     </div>
   );
 }
 
-function SceneLabel({ id, title, owner, color, side }: { id: string; title: string; owner: string; color: string; side: "left" | "right" }) {
+function SceneLabel({ id, title, side }: { id: string; title: string; side: "left" | "right" }) {
   return (
     <div
       data-label={id}
@@ -414,17 +377,10 @@ function SceneLabel({ id, title, owner, color, side }: { id: string; title: stri
     >
       <svg className="absolute inset-0 h-full w-full overflow-visible">
         <line style={{ stroke: "var(--home-muted)" }} strokeWidth={1} strokeDasharray="3 3" />
-        <circle r={3} style={{ fill: color }} />
+        <circle r={3} style={{ fill: "var(--home-muted)" }} />
       </svg>
       <div data-text className={`absolute left-0 top-0 max-w-[40%] sm:max-w-none sm:whitespace-nowrap ${side === "left" ? "text-right" : ""}`}>
         <p className="text-[11px] font-semibold leading-tight text-[var(--home-text)] sm:text-[13px] md:text-[15px]">{title}</p>
-        <p
-          className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] sm:text-[10px] md:text-[11px]"
-          // Pull pale subteam colors toward the text color so they stay legible in light mode.
-          style={{ color: `color-mix(in srgb, ${color} 72%, var(--home-text))` }}
-        >
-          {owner}
-        </p>
       </div>
     </div>
   );
@@ -459,8 +415,6 @@ function CubeSatIllustration() {
               from={{ x: corner.x + 4, y: corner.y }}
               to={{ x: labelX, y: corner.y }}
               title={layer.name}
-              owner={layer.owner}
-              color={layer.color}
             />
           </g>
         );
@@ -483,16 +437,12 @@ function CubeSatIllustration() {
         from={chassisAnchor}
         to={{ x: 190, y: chassisAnchor.y - 60 }}
         title="2U aluminum chassis"
-        owner="Structures"
-        color={STRUCTURES}
         anchor="end"
       />
       <LeaderLabel
         from={{ x: panelAnchor.x + leftOut.x, y: panelAnchor.y + leftOut.y }}
         to={{ x: 150, y: panelAnchor.y + leftOut.y + 90 }}
         title="Solar panels"
-        owner="Power"
-        color={POWER}
         anchor="end"
       />
     </svg>

@@ -227,7 +227,6 @@ body {
 .home-landing {
   --home-ink: var(--home-bg);
   --home-fog: var(--home-text);
-  font-family: var(--font-home-body), system-ui, sans-serif;
 }
 
 .home-stars {
@@ -401,14 +400,6 @@ body {
   .c-label-title {
     font-size: 22px;
   }
-  .c-label-owner {
-    font-size: 16px;
-  }
-}
-
-.story-chip {
-  border: 1px solid var(--home-border);
-  background: color-mix(in srgb, var(--home-signal) 7%, transparent);
 }
 
 .home-panel-surface {

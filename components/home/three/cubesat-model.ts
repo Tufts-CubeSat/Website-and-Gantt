@@ -17,8 +17,6 @@ const ROD = 35;
 
 export interface LayerSpec {
   name: string;
-  owner: string;
-  color: string;
   /** Board plus tallest component, in mm; drives the packing of the compact stack. */
   height: number;
 }
@@ -190,22 +188,25 @@ function chip(m: Materials, texture: THREE.Texture, w: number, h: number, d: num
   return group;
 }
 
+/** Solder-mask accent shared by every board. */
+const PCB_ACCENT = "#16a34a";
+
 export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interior: boolean; explodedSpacing?: number }): CubeSatModel {
   const root = new THREE.Group();
   const geometryBoard = boardGeometry();
   const wheels: THREE.Object3D[] = [];
 
-  const board = (spec: LayerSpec, seed: number, label: string) => {
-    const b = new THREE.Mesh(geometryBoard, [m.pcb(spec.color, seed, label), m.pcbEdge]);
+  const board = (seed: number, label: string) => {
+    const b = new THREE.Mesh(geometryBoard, [m.pcb(PCB_ACCENT, seed, label), m.pcbEdge]);
     b.castShadow = true;
     b.receiveShadow = true;
     return b;
   };
 
-  const builders: ((spec: LayerSpec, group: THREE.Group) => ModelLayer["deploy"] | void)[] = [
+  const builders: ((group: THREE.Group) => ModelLayer["deploy"] | void)[] = [
     // Antenna deck: burn-wire release module and four tape-spring monopoles.
-    (spec, g) => {
-      g.add(board(spec, 11, "ANT DECK  rev C"));
+    (g) => {
+      g.add(board(11, "ANT DECK  rev C"));
       g.add(box(26, 5, 26, m.whitePlastic, 0, BOARD_T, 0, 1));
       g.add(cylinder(3, 1.2, m.gold, 0, BOARD_T + 5, 0));
       const tapes: THREE.Mesh[] = [];
@@ -227,8 +228,8 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
       };
     },
     // VHF/UHF transceiver: RF shield can, SMA connector, TCXO.
-    (spec, g) => {
-      g.add(board(spec, 23, "TRX VHF/UHF"));
+    (g) => {
+      g.add(board(23, "TRX VHF/UHF"));
       g.add(box(56, 7.5, 36, m.nickel, -4, BOARD_T, -14, 0.6));
       g.add(chip(m, m.chips.rf, 7, 1, 7, 18, 14));
       const sma = new THREE.Group();
@@ -244,8 +245,8 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
       g.add(smallParts(m, 5, 34, (x, z) => nearHeader(x, z) || inRect(x, z, -4, -14, 56, 36) || inRect(x, z, 32, 24, 8, 10)));
     },
     // EPS: two 18650 cells in a bracket, inductors and the charger IC.
-    (spec, g) => {
-      g.add(board(spec, 37, "EPS  2S1P"));
+    (g) => {
+      g.add(board(37, "EPS  2S1P"));
       for (const z of [-22, 0]) {
         const cell = cylinder(9, 65, [m.batteryWrap, m.nickel, m.nickel], 0, 0, 0, 48);
         cell.rotation.z = Math.PI / 2;
@@ -267,8 +268,8 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
       g.add(smallParts(m, 7, 24, (x, z) => nearHeader(x, z) || inRect(x, z, -4, -11, 76, 40)));
     },
     // ADCS: three reaction wheels and a magnetorquer rod.
-    (spec, g) => {
-      g.add(board(spec, 41, "ADCS  RW x3"));
+    (g) => {
+      g.add(board(41, "ADCS  RW x3"));
       for (const [x, z] of [
         [-20, -18],
         [20, -18],
@@ -298,8 +299,8 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
       g.add(header(m));
     },
     // Flight computer: FPGA under a lid, MCU, flash, crystal, microSD.
-    (spec, g) => {
-      g.add(board(spec, 53, "OBC  FPGA+MCU"));
+    (g) => {
+      g.add(board(53, "OBC  FPGA+MCU"));
       g.add(box(23, 1.2, 23, m.pcbEdge, -18, BOARD_T, -16));
       g.add(chip(m, m.chips.fpga, 19, 1.4, 19, -18, -16));
       g.add(chip(m, m.chips.mcu, 16, 1.4, 16, 18, -16));
@@ -311,8 +312,8 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
       g.add(smallParts(m, 9, 40, (x, z) => nearHeader(x, z) || inRect(x, z, -18, -16, 23, 23) || inRect(x, z, 18, -16, 18, 18) || inRect(x, z, -26, 10, 14, 15)));
     },
     // Vision payload: GoPro body looking out of the top of the spacecraft.
-    (spec, g) => {
-      g.add(board(spec, 67, "PAYLOAD  CAM"));
+    (g) => {
+      g.add(board(67, "PAYLOAD  CAM"));
       const body = box(52, 30, 40, m.goproBody, 0, BOARD_T, -4, 3);
       g.add(body);
       const lensY = BOARD_T + 30;
@@ -343,7 +344,7 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
   if (options.interior) {
     specs.forEach((spec, i) => {
       const group = new THREE.Group();
-      const deploy = builders[i]?.(spec, group) ?? undefined;
+      const deploy = builders[i]?.(group) ?? undefined;
       group.position.y = (compactZ[i] - HALF) * MM;
       root.add(group);
       layers.push({ spec, group, compactZ: compactZ[i], explodedZ: explodedZ[i], anchor: v(BOARD / 2, BOARD_T, -BOARD / 2), deploy });
@@ -354,7 +355,7 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
     // that show past the panels.
     for (const i of [0, specs.length - 1]) {
       const group = new THREE.Group();
-      builders[i](specs[i], group)?.(1);
+      builders[i](group)?.(1);
       group.position.y = (compactZ[i] - HALF) * MM;
       root.add(group);
     }

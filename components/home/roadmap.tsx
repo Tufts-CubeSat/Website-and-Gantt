@@ -32,7 +32,7 @@ export function Roadmap() {
         <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Roadmap</p>
-            <h2 id="roadmap-heading" className="max-w-xl font-[family-name:var(--font-home-display)] text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
+            <h2 id="roadmap-heading" className="max-w-xl text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
               This year on the way to launch.
             </h2>
           </div>

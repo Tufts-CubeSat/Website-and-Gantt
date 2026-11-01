@@ -26,9 +26,8 @@ export interface Subteam {
   tagline: string;
   /** CSS color used for accents, avatar rings, and diagram labels */
   color: string;
-  /** Optional intro paragraphs, shown above the goals on /subteams */
-  about?: string[];
-  whatWeDo: string[];
+  /** Optional intro paragraph, shown above the goals on /subteams */
+  about?: string;
   /** Optional reasons to join, shown on /subteams */
   whyJoin?: string[];
   semesterGoals: string[];
@@ -66,47 +65,21 @@ export const subteams: Subteam[] = [
   {
     id: "structures",
     name: "Structures",
-    tagline: "The chassis, the thermal and vibration analysis, and the orbit it all lives in.",
+    tagline: "Chassis design, thermal and vibration analysis, and orbital mechanics.",
     color: "#f59e0b",
-    whatWeDo: ["Machining", "Simulation & testing", "Systems engineering", "Orbital mechanics"],
-    semesterGoals: [
-      "CAD the GoPro payload parts and boards",
-      "Iterate on the chassis CAD with updated specs",
-      "Thermal and vibrational analysis of the chassis",
-      "Orbital mechanics calculations",
-      "Build a physical model",
-    ],
+    semesterGoals: ["CAD the payload and boards", "Iterate on the chassis", "Thermal & vibration analysis", "Build a physical model"],
     futureGoals: [],
-    learn: ["CAD (Onshape)", "ANSYS", "Machine Lab & Makerspace equipment", "FreeFlyer"],
+    learn: ["Onshape", "ANSYS", "Machine shop tools", "FreeFlyer"],
     meeting: { day: "Fridays", time: "6:00pm – 7:30pm", location: "Nolop" },
   },
   {
     id: "software",
     name: "Software",
-    tagline: "Image processing, flight software, and the neural network that finds debris.",
+    tagline: "Image processing, flight software, and onboard debris detection.",
     color: "#38bdf8",
-    whatWeDo: ["Image processing", "Flight software", "FPGA development", "Web development"],
-    semesterGoals: [
-      "Python image processing pipeline, verified and tested",
-      "Port image processing to C",
-      "Contribute to the open-source Generalized ADCS project",
-      "Flight software & FPGA on the new board",
-      "Web development (sub-subteam)",
-    ],
-    futureGoals: [
-      "Neural network design and development",
-      "A complete, adaptive onboard machine learning pipeline",
-      "Transfer programs of various sizes over RF",
-      "Mission simulation",
-    ],
-    learn: [
-      "Git & GitHub (issues, PRs, branches)",
-      "Python",
-      "C/C++",
-      "Linear algebra",
-      "Design & development best practices",
-      "Optimization",
-    ],
+    semesterGoals: ["Image processing pipeline (Python → C)", "Flight software & FPGA", "Generalized ADCS contributions", "This website"],
+    futureGoals: ["Onboard ML pipeline", "Data transfer over RF", "Mission simulation"],
+    learn: ["Git & GitHub", "Python, C/C++", "Linear algebra"],
     meeting: { day: "Saturdays", time: "12:00pm – 1:00pm", location: "Halligan 145" },
   },
   {
@@ -114,18 +87,9 @@ export const subteams: Subteam[] = [
     name: "Power",
     tagline: "Collecting sunlight and keeping every subsystem alive through eclipse.",
     color: "#a3e635",
-    whatWeDo: ["Electrical power system design", "PCB design", "Circuit simulation"],
-    semesterGoals: [
-      "Design an Electrical Power System (EPS) for the CubeSat",
-      "Design PCBs for solar cell power collection and regulation",
-      "Document trade-offs, benefits, and future design iterations",
-    ],
-    futureGoals: [
-      "Evaluate the whole CubeSat system and EPS efficiency",
-      "Research new methods to improve power collection efficiency",
-      "Discuss industry standards with professionals in the field",
-    ],
-    learn: ["Altium / KiCad", "PCB design", "LTspice circuit simulation", "Electronic circuit design", "Systems engineering"],
+    semesterGoals: ["Design the electrical power system", "Solar collection & regulation PCBs"],
+    futureGoals: ["System-level efficiency analysis", "Better power collection"],
+    learn: ["Altium / KiCad", "PCB design", "LTspice"],
     meeting: { day: "Sundays", time: "3:00pm – 4:00pm", location: "Halligan 145" },
   },
   {
@@ -133,54 +97,22 @@ export const subteams: Subteam[] = [
     name: "Comms",
     tagline: "The radio link between SPACE RACCOON and the ground.",
     color: "#c084fc",
-    whatWeDo: ["RF link design", "Ground station operations", "Spectrum licensing"],
-    semesterGoals: [
-      "Select an operational frequency band (VHF/UHF baseline) and document regulatory requirements",
-      "Research and select a compatible transceiver and antenna",
-      "Build a prototype ground station and demonstrate packet transmit/receive",
-    ],
-    futureGoals: [
-      "End-to-end image downlink using payload data (compression + packetization)",
-      "Environmental testing of RF equipment (thermal, vibration, vacuum)",
-      "An automated operations pipeline to receive, decode, store telemetry, and send commands",
-    ],
-    learn: [
-      "RF & satellite link fundamentals (antennas, link budgets, Doppler)",
-      "Spectrum regulations & mission operations",
-      "End-to-end data handling (packetizing, decoding, visualization)",
-    ],
+    semesterGoals: ["Choose a frequency band", "Select a transceiver & antenna", "Prototype ground station"],
+    futureGoals: ["Image downlink", "RF environmental testing", "Automated ground operations"],
+    learn: ["RF & link budgets", "Spectrum regulations", "Packet handling"],
     meeting: { day: "Sundays", time: "3:30pm – 4:30pm", location: "Halligan 145" },
   },
   {
     // TODO(weather-balloon): add a meeting time and members once they're set.
     id: "weather-balloon",
     name: "Weather Balloon",
-    tagline: "A giant helium balloon that carries our electronics to near space, about 100,000 ft up.",
+    tagline: "Sending electronics to near space, about 100,000 ft up.",
     color: "#fb7185",
-    about: [
-      "A weather balloon is a giant helium balloon attached to a box of electronics. It climbs to near space (around 100,000 ft) and captures incredible footage of the curvature of the Earth, then falls back to the ground a few hours later for us to recover.",
-      "It isn't a CubeSat subsystem, but it's an extremely useful way to test electronics and communications systems before we build and launch the CubeSat, which is why many CubeSat programs (including ours!) run ballooning projects.",
-    ],
-    whatWeDo: ["Balloon research", "Payload box design", "Launch-day logistics", "Flight tracking"],
-    whyJoin: [
-      "Very beginner friendly: no experience needed",
-      "Build and launch in months, not years",
-      "Bragging rights for sending hardware to near space, far higher than rocketry or commercial flights",
-      "Go as technical as you want",
-    ],
-    semesterGoals: [
-      "Research high-altitude balloons",
-      "Design a simple payload box",
-      "Plan the logistics for launch day",
-    ],
+    about:
+      "A helium balloon carries a payload box to near space, films the curvature of the Earth, and falls back a few hours later. It's a fast, beginner-friendly way to test electronics and comms before the CubeSat flies.",
+    semesterGoals: ["Research high-altitude balloons", "Design the payload box", "Plan launch day"],
     futureGoals: [],
-    learn: [
-      "Flight simulation",
-      "Balloon filling & launch operations",
-      "In-flight tracking",
-      "Onboard electronics",
-      "HAM radio (get licensed!)",
-    ],
+    learn: ["Flight simulation", "Launch operations", "Flight tracking", "HAM radio"],
     isNew: true,
   },
 ];
