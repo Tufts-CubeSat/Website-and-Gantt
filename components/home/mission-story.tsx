@@ -18,12 +18,12 @@ const stages = [
   {
     title: "Launch",
     kicker: "Target 2029",
-    body: "After two to three years of design and testing on campus, SPACE RACCOON rides to orbit as a compact 2U CubeSat: the first satellite ever built at Tufts.",
+    body: "After two to three years of design and testing on campus, SPACE RACCOON gets to orbit!",
   },
   {
     title: "Reach orbit",
     kicker: "Low Earth Orbit · 14 months",
-    body: "Deployed into Low Earth Orbit for a 14-month mission, the satellite runs on body-mounted solar cells and holds its attitude with in-house reaction wheels.",
+    body: "Deployed into Low Earth Orbit for a 14-month mission, the satellite runs on body-mounted solar cells.",
   },
   {
     title: "Detect",
@@ -33,7 +33,7 @@ const stages = [
   {
     title: "Classify",
     kicker: "Onboard computer vision",
-    body: "Image processing isolates each object and a neural network classifies it (fragment, rocket body, defunct satellite) right on the spacecraft.",
+    body: "Image processing isolates each object and a neural network classifies it (fragment, rocket body, defunct satellite) on the spacecraft.",
   },
   {
     title: "Assess the risk",
@@ -48,7 +48,7 @@ const stages = [
   {
     title: "Open to everyone",
     kicker: "Open source",
-    body: "Flight software and debris data are released openly to support safer orbital operations and the student teams that come after us.",
+    body: "Flight software and debris data are all open-source to support safer orbital operations and the student teams that come after us!",
   },
 ];
 

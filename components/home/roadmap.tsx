@@ -33,7 +33,7 @@ export function Roadmap() {
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Roadmap</p>
             <h2 id="roadmap-heading" className="max-w-xl text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
-              This year on the way to launch.
+               26-27 Timeline:
             </h2>
           </div>
           <Link href="/space-raccoon/timeline" className="text-sm font-medium text-[var(--home-signal)] hover:underline">

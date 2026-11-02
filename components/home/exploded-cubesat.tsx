@@ -305,11 +305,11 @@ export function ExplodedCubeSat() {
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--home-signal)]">Inside SPACE RACCOON</p>
           <h2 id="cubesat-heading" className="mb-4 text-3xl font-semibold tracking-tight text-[var(--home-text)] md:text-4xl">
-            Every layer, built by students.
+            Manufactured on campus.
           </h2>
           <p className="mb-6 max-w-md text-sm leading-relaxed text-[var(--home-muted)] md:text-base">
             A 2U CubeSat is just 10 × 10 × 22.7 cm. Inside that volume sits everything the mission needs: structure, power,
-            flight software and vision, and the radio link home.
+            flight software and vision, and the radio link.
           </p>
           <p className="c-hint mt-8 hidden text-xs uppercase tracking-[0.2em] text-[var(--home-muted)] motion-safe:block">
             Scroll to open the spacecraft ↓
