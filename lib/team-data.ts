@@ -120,22 +120,21 @@ export const subteams: Subteam[] = [
 export const members: Member[] = [
   { name: "William Goldman", slug: "william-goldman", roles: ["Project Lead", "Software Lead"], subteams: ["software"], lead: "project", linkedin: "https://www.linkedin.com/in/william-goldman-79125a283/", website: "https://goldmanwilliam.com", },
   { name: "Natalie Germanov", slug: "natalie-germanov", roles: ["Project Lead", "Structures Lead"], subteams: ["structures"], lead: "project" },
-  { name: "Jacky Zhao", slug: "jacky-zhao", roles: ["Power Lead"], subteams: ["power"], lead: "subteam" },
   { name: "Ryan Cooley", slug: "ryan-cooley", roles: ["Comms Lead"], subteams: ["comms"], lead: "subteam" },
   { name: "Adonis Deking", slug: "adonis-deking", roles: ["Structures Member"], subteams: ["structures"], website: "https://adonisdeking.com" },
   { name: "Allie Staiger", slug: "allie-staiger", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Isaac Meredith", slug: "isaac-meredith", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Molly Kreitman", slug: "molly-kreitman", roles: ["Structures Member"], subteams: ["structures"] },
   { name: "Timothy Ngo", slug: "timothy-ngo", roles: ["Structures Member"], subteams: ["structures"] },
-  { name: "Steven Bagade", slug: "steven-bagade", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Jules Crowson", slug: "jules-crowson", roles: ["Power Co-Lead"], subteams: ["power"], lead: "subteam" },
+  { name: "Steven Bagade", slug: "steven-bagade", roles: ["Power Co-Lead"], subteams: ["power"], lead: "subteam" },
   { name: "Daniel Carreno", slug: "daniel-carreno", roles: ["Power Member"], subteams: ["power"] },
-  { name: "Jules Crowson", slug: "jules-crowson", roles: ["Power Member"], subteams: ["power"] },
+  { name: "Gabriel Krauze", slug: "gabriel-krauze", roles: ["Power Member"], subteams: ["power"] },
   { name: "Evey Slavik", slug: "evey-slavik", roles: ["Power Member"], subteams: ["power"] },
   { name: "Max Chen", slug: "max-chen", roles: ["Power Member"], subteams: ["power"] },
   { name: "Sean Ozalpasan", slug: "sean-ozalpasan", roles: ["Power Member"], subteams: ["power"] },
   { name: "Navya Agrawal", slug: "navya-agrawal", roles: ["Comms & Power Member"], subteams: ["comms", "power"] },
   { name: "Maksim Mandel", slug: "maksim-mandel", roles: ["Comms Member"], subteams: ["comms"] },
-  { name: "Gabriel Krauze", slug: "gabriel-krauze", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Brandon Douglas", slug: "brandon-douglas", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Sam Linnington", slug: "sam-linnington", roles: ["Comms Member"], subteams: ["comms"] },
   { name: "Owen Lawler", slug: "owen-lawler", roles: ["Comms Member"], subteams: ["comms"] },
@@ -155,7 +154,6 @@ export const emailOverrides: Record<string, string> = {
   "sam-linnington": "samuel.linnington@tufts.edu",
   "owen-lawler": "owen.lawler@tufts.edu",
   "brandon-douglas": "brandon.douglas@tufts.edu",
-  "jacky-zhao": "jacky.zhao@tufts.edu",
   "molly-kreitman": "molly.kreitman@tufts.edu",
   "allie-staiger": "allison.staiger@tufts.edu",
   "steven-bagade": "steven.bagade@tufts.edu",
@@ -171,21 +169,45 @@ export const emailOverrides: Record<string, string> = {
   "navya-agrawal": "navya.agrawal@tufts.edu",
 };
 
-export const alumni = [
-  "Andy Navarro",
-  "Vanessa Bellotti",
-  "Trevor Wallace",
-  "Kyle Wigdor",
-  "Alberto de la Villa Ramirez",
-  "Jai Deshpande",
-  "Maggie Olson",
+export interface Alumnus {
+  name: string;
+  /** Notable past role, shown as small text under the name. */
+  previousRole?: string;
+}
+
+export const alumni: Alumnus[] = [
+  { name: "Jacky Zhao", previousRole: "2024–2026 Power Lead" },
+  { name: "Andy Navarro", previousRole: "2021–2023 Structures Lead" },
+  { name: "Vanessa Bellotti", previousRole: "2021–2024 Project Lead" },
+  { name: "Trevor Wallace", previousRole: "2024 Structures Lead" },
+  { name: "Kyle Wigdor", previousRole: "2022–2023 Software Lead" },
+  { name: "Alberto de la Villa Ramirez" },
+  { name: "Jai Deshpande" },
+  { name: "Maggie Olson" },
 ];
 
 export const specialThanks = ["Evana Gizzi", "Niclas Scheuer"];
 
-export const collaborators = ["MIT", "UMass Lowell"];
+export interface Employer {
+  name: string;
+  /** Logo in /public/logos/employers, trimmed to its edges and 160px tall. */
+  logo: string;
+  /** Intrinsic logo size, used to reserve space before the image loads. */
+  width: number;
+  height: number;
+}
 
-export const employers = ["Medtronic", "Draper", "NVIDIA", "Blue Origin", "Takeda", "MITRE", "Amazon Robotics"];
+// TODO(general-dynamics): add once a logo with visible pixels is available.
+export const employers: Employer[] = [
+  { name: "Medtronic", logo: "/logos/employers/medtronic.png", width: 971, height: 160 },
+  { name: "Draper", logo: "/logos/employers/draper.png", width: 1353, height: 160 },
+  { name: "NVIDIA", logo: "/logos/employers/nvidia.png", width: 869, height: 160 },
+  { name: "Blue Origin", logo: "/logos/employers/blue-origin.png", width: 946, height: 160 },
+  { name: "MathWorks", logo: "/logos/employers/mathworks.png", width: 601, height: 160 },
+  { name: "Takeda", logo: "/logos/employers/takeda.png", width: 475, height: 160 },
+  { name: "MITRE", logo: "/logos/employers/mitre.png", width: 564, height: 160 },
+  { name: "Amazon Robotics", logo: "/logos/employers/amazon-robotics.png", width: 516, height: 160 },
+];
 
 export interface Milestone {
   month: string;

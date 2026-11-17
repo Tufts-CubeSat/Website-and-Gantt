@@ -176,9 +176,10 @@ export default function Team() {
           <section>
             <h2 className="mb-4 text-2xl font-semibold text-[var(--home-text)]">Alumni</h2>
             <ul className="grid gap-2 sm:grid-cols-2">
-              {alumni.map((name) => (
+              {alumni.map(({ name, previousRole }) => (
                 <li key={name} className="home-panel-surface p-3 text-sm text-[var(--home-text)]">
                   {name}
+                  {previousRole && <p className="mt-0.5 text-xs text-[var(--home-muted)]">{previousRole}</p>}
                 </li>
               ))}
             </ul>

@@ -45,7 +45,7 @@ Add an entry to `members` in [lib/team-data.ts](lib/team-data.ts):
 
 - **Email** is generated as `first.last@tufts.edu`. If someone's address is different, add it to `emailOverrides`.
 - **Links:** `linkedin` and `website` are optional, and each shows as an icon link on the member's `/team` card when set. A `github.com` URL is labeled "GitHub"; any other URL is labeled "Website". Only add links the member has given you.
-- **Leaving the team:** remove the member and add their name to `alumni`.
+- **Leaving the team:** remove the member and add them to `alumni` (optionally with a `previousRole`).
 
 ### Add a member photo
 

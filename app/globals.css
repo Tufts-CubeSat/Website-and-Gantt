@@ -412,10 +412,6 @@ body {
   animation: marquee 40s linear infinite;
 }
 
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-
 @keyframes marquee {
   from {
     transform: translate3d(0, 0, 0);
