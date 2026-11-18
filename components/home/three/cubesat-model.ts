@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import type { Materials } from "./materials";
+import { mergeStatic } from "./merge";
 
 /**
  * Procedural 2U CubeSat. Modelled in millimetres (scaled to 1 unit = 100 mm),
@@ -216,6 +217,7 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
         const tape = mesh(new THREE.BoxGeometry(1, 0.25 * MM, 3.2 * MM), m.tapeSpring, 0, BOARD_T + 3, 0);
         tape.geometry.translate(0.5, 0, 0);
         tape.position.x = 13 * MM;
+        tape.userData.dynamic = true;
         pivot.add(tape);
         g.add(pivot);
         tapes.push(tape);
@@ -278,6 +280,7 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
         g.add(cylinder(14, 6, m.blackAnodized, x, BOARD_T, z, 48));
         const wheel = new THREE.Group();
         wheel.position.set(x * MM, (BOARD_T + 6) * MM, z * MM);
+        wheel.userData.dynamic = true;
         const rim = mesh(new THREE.TorusGeometry(11 * MM, 1.6 * MM, 16, 64), m.aluminum);
         rim.rotation.x = Math.PI / 2;
         rim.position.y = 2 * MM;
@@ -344,6 +347,7 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
   if (options.interior) {
     specs.forEach((spec, i) => {
       const group = new THREE.Group();
+      group.userData.dynamic = true;
       const deploy = builders[i]?.(group) ?? undefined;
       group.position.y = (compactZ[i] - HALF) * MM;
       root.add(group);
@@ -362,13 +366,16 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
   }
 
   // Structure: rails, end and mid frames, stack rods.
+  // One shared fading material for everything in front, so those parts merge.
   const frontStructure: THREE.Material[] = [];
   const structure = (front: boolean) => {
     if (!front) return m.aluminum;
-    const material = m.aluminum.clone();
-    material.transparent = true;
-    frontStructure.push(material);
-    return material;
+    if (!frontStructure[0]) {
+      const material = m.aluminum.clone();
+      material.transparent = true;
+      frontStructure.push(material);
+    }
+    return frontStructure[0];
   };
   const railOffset = 50 - 4.25;
   for (const [x, z] of [
@@ -420,10 +427,14 @@ export function buildCubeSat(m: Materials, specs: LayerSpec[], options: { interi
     panel.position.z = 51.4 * MM;
     const group = new THREE.Group();
     group.rotation.y = rotation;
+    group.userData.dynamic = true;
     group.add(panel);
     root.add(group);
     panels.push({ group, normal, front, materials });
   }
+
+  // Layers, panels, wheels and antenna tapes move; everything else is static.
+  mergeStatic(root);
 
   const setExplode = (amounts: number[]) => {
     layers.forEach((layer, i) => {

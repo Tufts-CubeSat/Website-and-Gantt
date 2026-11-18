@@ -179,7 +179,10 @@ export function createMissionScene(canvas: HTMLCanvasElement, specs: LayerSpec[]
   const { scene, camera } = stage;
 
   // Earth, turned so the ground station sits over Tufts in Medford, MA.
-  const earth = createEarth(R, SUN, onReady, stage.prepareTexture);
+  // Visible once the Earth maps are in and the shaders are compiled.
+  let texturesLoaded!: () => void;
+  const textures = new Promise<void>((resolve) => (texturesLoaded = resolve));
+  const earth = createEarth(R, SUN, texturesLoaded, stage.prepareTexture);
   earth.globe.position.copy(CENTER);
   earth.shell.position.copy(CENTER);
   const stationDir = surfaceNormal(70);
@@ -484,7 +487,7 @@ export function createMissionScene(canvas: HTMLCanvasElement, specs: LayerSpec[]
     pointer.ty = THREE.MathUtils.clamp(((event.clientY - rect.top) / rect.height) * 2 - 1, -1, 1);
   };
   window.addEventListener("pointermove", onPointer, { passive: true });
-  stage.warmUp();
+  Promise.all([textures, stage.warmUp()]).then(onReady);
 
   return {
     dispose() {

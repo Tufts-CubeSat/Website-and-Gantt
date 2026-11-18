@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { CUBESAT_LAYERS } from "./cubesat-layers";
 import { createMissionState, SAT_ANGLES as SAT_ANGLES_3D, type MissionState } from "./three/mission-scene";
 import { gsap, HEADER_OFFSET, useGsap } from "./use-gsap";
-import { useWebGLScenes } from "./use-webgl";
+import { useSceneTrigger, useWebGLScenes } from "./use-webgl";
 
 /**
  * Pinned, scroll-scrubbed walkthrough of the SPACE RACCOON mission.
@@ -352,8 +352,10 @@ function MissionScene3D({ state }: { state: MissionState }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
+  const near = useSceneTrigger(stageRef, 0);
 
   useEffect(() => {
+    if (!near) return;
     let disposed = false;
     let scene: { dispose: () => void } | undefined;
     import("./three/mission-scene").then(({ createMissionScene }) => {
@@ -377,7 +379,7 @@ function MissionScene3D({ state }: { state: MissionState }) {
       disposed = true;
       scene?.dispose();
     };
-  }, [state]);
+  }, [state, near]);
 
   return (
     <div className="mission-3d relative aspect-[4/3] w-full md:aspect-[16/11]" role="img" aria-label={SCENE_LABEL}>

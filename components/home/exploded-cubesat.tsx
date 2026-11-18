@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CUBESAT_LAYERS } from "./cubesat-layers";
 import type { ExplodedState, LabelElement } from "./three/exploded-scene";
 import { gsap, HEADER_OFFSET, useGsap } from "./use-gsap";
-import { useWebGLScenes } from "./use-webgl";
+import { useSceneTrigger, useWebGLScenes } from "./use-webgl";
 
 /**
  * "Scroll to open the CubeSat": a 2U stack that separates into its subsystems
@@ -330,10 +330,12 @@ function CubeSatModel3D({ state }: { state: ExplodedState }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
+  const near = useSceneTrigger(stageRef, 1500);
 
   useEffect(() => {
+    if (!near) return;
     let disposed = false;
-    let scene: { dispose: () => void } | undefined;
+    let scene: { ready: Promise<void>; dispose: () => void } | undefined;
     import("./three/exploded-scene").then(({ createExplodedScene }) => {
       const stage = stageRef.current;
       const canvas = canvasRef.current;
@@ -347,13 +349,15 @@ function CubeSatModel3D({ state }: { state: ExplodedState }) {
         chassis: find("chassis"),
         panel: find("panel"),
       });
-      setReady(true);
+      scene.ready.then(() => {
+        if (!disposed) setReady(true);
+      });
     });
     return () => {
       disposed = true;
       scene?.dispose();
     };
-  }, [state]);
+  }, [state, near]);
 
   return (
     <div ref={stageRef} className="relative mx-auto h-[min(52vh,740px)] min-h-[340px] w-full md:h-[min(76vh,740px)] md:min-h-[420px]" role="img" aria-label={MODEL_LABEL}>

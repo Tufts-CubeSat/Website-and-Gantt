@@ -160,21 +160,36 @@ export function latLonToLocal(lat: number, lon: number) {
 }
 
 export function createEarth(radius: number, sunDir: THREE.Vector3, onLoad?: () => void, prepare?: (texture: THREE.Texture) => void) {
-  const loader = new THREE.TextureLoader();
   let pending = 3;
   const loaded = (t: THREE.Texture) => {
     prepare?.(t);
     pending -= 1;
     if (pending === 0) onLoad?.();
   };
+  // ImageBitmaps decode off the main thread. With a plain <img> the JPEG is
+  // decoded during the GPU upload instead, a ~450 ms freeze for the 4K day map.
+  const bitmapLoader = typeof createImageBitmap === "function" ? new THREE.ImageBitmapLoader().setOptions({ imageOrientation: "flipY" }) : null;
+  const imageLoader = new THREE.TextureLoader();
   const texture = (url: string, srgb: boolean) => {
-    const t = loader.load(url, loaded);
+    let t: THREE.Texture;
+    if (bitmapLoader) {
+      t = new THREE.Texture();
+      bitmapLoader.load(url, (bitmap) => {
+        t.image = bitmap;
+        t.needsUpdate = true;
+        loaded(t);
+      });
+    } else {
+      t = imageLoader.load(url, loaded);
+    }
     t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
     t.anisotropy = 16;
     t.wrapS = THREE.RepeatWrapping;
     return t;
   };
-  const dayMap = texture("/textures/earth/day.jpg", true);
+  // Phones show the globe a few hundred pixels across; the 4K map is wasted there.
+  const small = window.matchMedia("(max-width: 767px)").matches;
+  const dayMap = texture(small ? "/textures/earth/day-2048.jpg" : "/textures/earth/day.jpg", true);
   const nightMap = texture("/textures/earth/night.jpg", true);
   const cloudMap = texture("/textures/earth/clouds.jpg", false);
 
